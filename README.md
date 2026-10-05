@@ -1,3 +1,8 @@
+<p align="center">
+
+  <img src=".github/assets/democrapsulas-banner.jpeg" width="100%">
+
+</p>
 # Democrápsulas
 
 Um site onde as pessoas escrevem mensagens para o futuro e guardam dentro de lâmpadas. Cada lâmpada sobe pela tela com um cronômetro embaixo, e ninguém consegue ler o que está escrito até o tempo acabar. Quando chega a zero, qualquer visitante pode abrir a lâmpada, ler a mensagem e ver quem escreveu e em que dia.
