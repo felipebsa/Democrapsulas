@@ -76,7 +76,44 @@ O servidor é uma API em Python com FastAPI e banco PostgreSQL, com autenticaç�
 
 ## Como rodar
 
-Ainda não tem versão para rodar. Quando tiver, as instruções entram aqui.
+Por enquanto só o servidor roda. O site ainda está em construção. Você precisa de Docker e Python instalados.
+
+1. Copie o `.env.example` para `.env` e troque o valor de `SECRET_KEY`.
+
+2. Suba o banco, na pasta raiz do projeto:
+
+   ```bash
+   docker compose up -d db
+   ```
+
+   O PostgreSQL fica disponível na porta 5433 do seu computador.
+
+3. Instale as dependências e crie as tabelas, dentro da pasta `backend`:
+
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   alembic upgrade head
+   ```
+
+4. Inicie a API, ainda dentro de `backend`:
+
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+A documentação interativa da API abre em http://localhost:8000/docs. Lá dá para testar `POST /auth/register`, `POST /auth/login` e `GET /auth/me`.
+
+Para subir a API e o banco juntos no Docker, rode `docker compose up -d --build` na raiz do projeto. As tabelas precisam existir antes, então faça o passo 3 pelo menos uma vez.
+
+Depois de mudar um model, gere uma migration nova e aplique:
+
+```bash
+alembic revision --autogenerate -m "descrição da mudança"
+alembic upgrade head
+```
+
+Rode os comandos do Alembic sempre de dentro de `backend`, porque é de lá que a API lê o `.env`.
 
 ## Quem faz
 
