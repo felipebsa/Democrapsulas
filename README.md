@@ -62,6 +62,10 @@ O servidor é uma API em Python com FastAPI e banco PostgreSQL, com autenticaç�
 
 ## Andamento
 
+- [x] Estrutura do servidor com FastAPI, PostgreSQL e Docker
+- [x] Contas: cadastro, login com token e rota da conta logada
+- [x] Migrations do banco com Alembic
+- [ ] Rotas da API para criar e abrir lâmpadas
 - [ ] Combinar o contrato da API e definir o visual dos salões
 - [ ] Montar a estrutura das páginas em HTML e CSS, com modo claro e escuro
 - [ ] Lâmpadas subindo, cronômetros e criar/abrir lâmpadas, usando dados de exemplo
