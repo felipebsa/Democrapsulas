@@ -58,7 +58,7 @@ Cada salão terá músicas candidatas, três na primeira versão e cinco depois.
 
 O front-end é feito com HTML, CSS e JavaScript puro. Entre os recursos de JavaScript que mais vamos usar estão manipulação do DOM, eventos, Date, setInterval, fetch, Audio e localStorage.
 
-O servidor deve ser uma API em Python com FastAPI e banco PostgreSQL, com autenticação por token. Isso ainda precisa ser confirmado conforme o desenvolvimento avançar. O código fica no GitHub, versionado com Git.
+O servidor é uma API em Python com FastAPI e banco PostgreSQL, com autenticação por token JWT. O acesso ao banco usa SQLAlchemy, as tabelas são criadas com migrations do Alembic e tudo roda em contêineres com Docker Compose. O código fica no GitHub, versionado com Git.
 
 ## Andamento
 
