@@ -7,8 +7,8 @@ from app.routes.auth import router as auth_router
 from app.routes.capsule import router as capsule_router
 
 #models
-# from app.models.user import User
-# from app.models.capsule import Capsule
+from app.models.user import User
+from app.models.capsule import Capsule
 
 
 app = FastAPI()
