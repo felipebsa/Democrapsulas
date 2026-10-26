@@ -5,7 +5,6 @@ from app.database import get_db
 from app.models.user import User
 from app.models.capsule import Capsule
 from app.models.vote import Vote
-from app.models.favorite import Favorite
 from app.core.config import settings
 from app.core.constants import HALLS, Hall
 from app.core.security import get_optional_user
@@ -61,8 +60,6 @@ def stats(db: Session = Depends(get_db)):
         capsules=count(db, capsule_count),
         open_capsules=count(db, capsule_count.where(Capsule.open_at <= now)),
         waiting_capsules=count(db, capsule_count.where(Capsule.open_at > now)),
-        private_capsules=count(db, capsule_count.where(Capsule.is_private == True)),
         capsules_per_hall=per_hall,
         votes=count(db, select(func.count()).select_from(Vote)),
-        favorites=count(db, select(func.count()).select_from(Favorite)),
     )

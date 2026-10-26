@@ -152,14 +152,12 @@ Rotas marcadas com 🔒 precisam do token (`Authorization: Bearer <token>`). As 
 | GET 🔒 | `/me/favorites` | Galeria (suas favoritas) |
 | GET | `/ranking` | Lâmpadas mais votadas (aceita `?hall=` e `?limit=`) |
 | GET | `/stats` | Dados do site |
-| GET | `/halls` | Lista dos salões |
 | GET | `/halls/estacoes/season` | Estação atual do Salão das Estações e quanto falta para trocar |
 | GET | `/halls/{salão}/songs` | Músicas candidatas e votos da semana atual |
 | PUT 🔒 | `/halls/{salão}/songs/vote` | Vota numa música `{"song_id": 1}` (pode trocar) |
 | GET | `/halls/{salão}/track` | Música que o salão toca: a vencedora da semana passada |
 | GET 🔒 | `/admin/capsules?status=hidden` | Admin: lâmpadas ocultas (ou `reported`, denunciadas e ainda visíveis) |
 | POST 🔒 | `/admin/capsules/{id}/approve` | Admin: libera a lâmpada e zera as denúncias |
-| POST 🔒 | `/admin/capsules/{id}/hide` | Admin: oculta a lâmpada |
 | DELETE 🔒 | `/admin/capsules/{id}` | Admin: apaga a lâmpada |
 
 Os salões são `asiatico`, `medieval`, `cyberpunk`, `espaco` e `estacoes`.

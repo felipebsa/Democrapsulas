@@ -5,7 +5,5 @@ class SchemaStats(BaseModel):
     capsules: int
     open_capsules: int
     waiting_capsules: int
-    private_capsules: int
     capsules_per_hall: dict[str, int]
     votes: int
-    favorites: int

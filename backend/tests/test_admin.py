@@ -24,7 +24,7 @@ def test_review_hidden_capsule(client, make_user, make_capsule, open_capsule, mo
     assert client.get(f"/capsules/{capsule_id}").status_code == 200
 
 
-def test_reported_list_hide_and_delete(client, make_user, make_capsule, open_capsule):
+def test_reported_list_and_delete(client, make_user, make_capsule, open_capsule, monkeypatch):
     admin = make_user(admin=True)
     capsule_id = make_capsule(make_user())
     open_capsule(capsule_id)
@@ -33,7 +33,8 @@ def test_reported_list_hide_and_delete(client, make_user, make_capsule, open_cap
     reported = client.get("/admin/capsules?status=reported", headers=admin).json()
     assert [capsule["id"] for capsule in reported] == [capsule_id]
 
-    client.post(f"/admin/capsules/{capsule_id}/hide", headers=admin)
+    monkeypatch.setattr(settings, "REPORTS_TO_HIDE", 2)
+    client.post(f"/capsules/{capsule_id}/report", json={}, headers=make_user())
     assert client.get(f"/capsules/{capsule_id}").status_code == 404
     #admins can still open it through the public route
     assert client.get(f"/capsules/{capsule_id}", headers=admin).status_code == 200

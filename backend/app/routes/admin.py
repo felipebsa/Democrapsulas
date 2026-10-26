@@ -49,13 +49,6 @@ def approve_capsule(capsule_id: int, db: Session = Depends(get_db)):
     db.commit()
     return to_admin_capsule(db, capsule)
 
-@router.post("/capsules/{capsule_id}/hide", response_model=SchemaAdminCapsule)
-def hide_capsule(capsule_id: int, db: Session = Depends(get_db)):
-    capsule = get_capsule_or_404(db, capsule_id)
-    capsule.is_hidden = True
-    db.commit()
-    return to_admin_capsule(db, capsule)
-
 @router.delete("/capsules/{capsule_id}", status_code=204)
 def delete_capsule(capsule_id: int, db: Session = Depends(get_db)):
     capsule = get_capsule_or_404(db, capsule_id)

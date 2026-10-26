@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.song import Song, SongVote
-from app.core.constants import HALLS, HALL_NAMES, Hall, SEASONS, SEASON_SECONDS
+from app.core.constants import Hall, SEASONS, SEASON_SECONDS
 from app.core.security import get_current_user, get_optional_user
-from app.schemas.hall import SchemaHall, SchemaSong, SchemaSongVoting, SchemaSongVote, SchemaTrack, SchemaSeason
+from app.schemas.hall import SchemaSong, SchemaSongVoting, SchemaSongVote, SchemaTrack, SchemaSeason
 from app.core.clock import now_utc
 from app.services.music import get_week_start, get_songs, tally_week, get_track
 
@@ -25,10 +25,6 @@ def build_voting(db: Session, hall: str, c_user) -> SchemaSongVoting:
         my_vote=current_votes.get(c_user.id) if c_user else None,
         songs=songs,
     )
-
-@router.get("", response_model=list[SchemaHall])
-def list_halls():
-    return [SchemaHall(id=hall, name=HALL_NAMES[hall]) for hall in HALLS]
 
 #current season of the seasons hall, from the server clock so everyone sees the same
 @router.get("/estacoes/season", response_model=SchemaSeason)

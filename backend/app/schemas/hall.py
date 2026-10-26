@@ -1,11 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-class SchemaHall(BaseModel):
-    id: str
-    name: str
-
-
 class SchemaSong(BaseModel):
     id: int
     hall: str

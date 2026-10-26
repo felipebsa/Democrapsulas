@@ -17,11 +17,6 @@ def finish_week(db):
     db.commit()
 
 
-def test_list_halls(client):
-    halls = client.get("/halls").json()
-    assert [hall["id"] for hall in halls] == ["asiatico", "medieval", "cyberpunk", "espaco", "estacoes"]
-
-
 def test_each_hall_has_three_songs(client):
     for hall in ("asiatico", "medieval", "cyberpunk", "espaco", "estacoes"):
         assert len(song_ids(client, hall)) == 3

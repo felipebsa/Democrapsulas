@@ -45,7 +45,6 @@ def test_stats(client, make_user, make_capsule, open_capsule):
     assert data["capsules"] == 3
     assert data["open_capsules"] == 1
     assert data["waiting_capsules"] == 2
-    assert data["private_capsules"] == 1
     assert data["capsules_per_hall"]["cyberpunk"] == 2
     assert data["capsules_per_hall"]["medieval"] == 0
     assert data["votes"] == 1
