@@ -11,13 +11,13 @@ from app.services.music import get_week_start, get_songs, tally_week, get_track
 
 router = APIRouter(prefix="/halls", tags=["halls"])
 
+def song_to_schema(song: Song, votes: int) -> SchemaSong:
+    return SchemaSong(id=song.id, hall=song.hall, title=song.title, file=song.file, votes=votes)
+
 def build_voting(db: Session, hall: str, c_user) -> SchemaSongVoting:
     week_start = get_week_start(now_utc())
     counts, current_votes, _ = tally_week(db, hall, week_start)
-    songs = [
-        SchemaSong(id=song.id, hall=song.hall, title=song.title, file=song.file, votes=counts.get(song.id, 0))
-        for song in get_songs(db, hall)
-    ]
+    songs = [song_to_schema(song, counts.get(song.id, 0)) for song in get_songs(db, hall)]
     return SchemaSongVoting(
         hall=hall,
         week_start=week_start,
@@ -71,6 +71,6 @@ def hall_track(hall: Hall, db: Session = Depends(get_db)):
 
     return SchemaTrack(
         hall=hall,
-        song=SchemaSong(id=song.id, hall=song.hall, title=song.title, file=song.file, votes=votes),
+        song=song_to_schema(song, votes),
         week_start=week_start,
     )
