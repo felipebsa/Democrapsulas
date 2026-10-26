@@ -1,0 +1,35 @@
+# Palavras bloqueadas nas lâmpadas. Uma por linha, sem precisar de acento.
+# O filtro ignora maiúsculas, acentos, letras repetidas e troca de letra por número (m3rda).
+arrombada
+arrombado
+babaca
+bosta
+buceta
+boceta
+cacete
+caralho
+corno
+cu
+cuzao
+desgraçado
+desgraçada
+foda
+fodase
+foder
+fodido
+fodida
+otario
+otaria
+porra
+puta
+puto
+putaria
+retardado
+retardada
+vadia
+vagabunda
+vagabundo
+viado
+xota
+xoxota
+merda
