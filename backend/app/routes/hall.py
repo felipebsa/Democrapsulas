@@ -6,7 +6,7 @@ from app.models.song import Song, SongVote
 from app.core.constants import HALLS, HALL_NAMES, Hall, SEASONS, SEASON_SECONDS
 from app.core.security import get_current_user, get_optional_user
 from app.schemas.hall import SchemaHall, SchemaSong, SchemaSongVoting, SchemaSongVote, SchemaTrack, SchemaSeason
-from app.services.capsule import now_utc
+from app.core.clock import now_utc
 from app.services.music import get_week_start, get_songs, tally_week, get_track
 
 router = APIRouter(prefix="/halls", tags=["halls"])

@@ -9,11 +9,12 @@ from app.models.favorite import Favorite
 from app.models.report import Report
 from app.core.config import settings
 from app.core.constants import Hall
+from app.core.clock import now_utc
 from app.core.profanity import contains_bad_words
 from app.core.security import get_current_user, get_optional_user
 from app.schemas.capsule import SchemaCapsuleCreate, SchemaCapsuleResponse, SchemaVote, SchemaReport
 from app.services.capsule import (
-    now_utc, serialize_capsule, serialize_capsules, get_capsule_or_404, get_visible_capsule, find_user_row, require_open,
+    serialize_capsule, serialize_capsules, get_capsule_or_404, get_visible_capsule, find_user_row, require_open,
 )
 
 router = APIRouter(prefix="/capsules", tags=["capsules"])

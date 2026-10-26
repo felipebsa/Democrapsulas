@@ -2,6 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func, String, ForeignKey, DateTime
 from app.database import Base
 from app.models.user import User
+from app.core.constants import HALL_MAX_LENGTH, TITLE_MAX_LENGTH, CONTENT_MAX_LENGTH
 from datetime import datetime
 
 class Capsule(Base):
@@ -9,9 +10,9 @@ class Capsule(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
-    hall: Mapped[str] = mapped_column(String(20), index=True)
-    title: Mapped[str] = mapped_column(String(80))
-    content: Mapped[str] = mapped_column(String(1000))
+    hall: Mapped[str] = mapped_column(String(HALL_MAX_LENGTH), index=True)
+    title: Mapped[str] = mapped_column(String(TITLE_MAX_LENGTH))
+    content: Mapped[str] = mapped_column(String(CONTENT_MAX_LENGTH))
     is_private: Mapped[bool] = mapped_column(default=False)
     is_hidden: Mapped[bool] = mapped_column(default=False)
     open_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)

@@ -1,16 +1,12 @@
-from datetime import datetime, timezone
 from fastapi import HTTPException
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
+from app.core.clock import now_utc
 from app.models.capsule import Capsule
 from app.models.user import User
 from app.models.vote import Vote
 from app.models.favorite import Favorite
 from app.schemas.capsule import SchemaCapsuleResponse
-
-
-def now_utc() -> datetime:
-    return datetime.now(timezone.utc)
 
 
 def serialize_capsules(db: Session, capsules: list[Capsule], user: User | None) -> list[SchemaCapsuleResponse]:

@@ -11,7 +11,8 @@ from app.core.constants import HALLS, Hall
 from app.core.security import get_optional_user
 from app.schemas.capsule import SchemaCapsuleResponse
 from app.schemas.stats import SchemaStats
-from app.services.capsule import now_utc, serialize_capsules
+from app.core.clock import now_utc
+from app.services.capsule import serialize_capsules
 
 router = APIRouter(tags=["stats"])
 

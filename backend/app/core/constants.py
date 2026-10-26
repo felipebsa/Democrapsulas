@@ -1,8 +1,7 @@
-from typing import Literal
-
-HALLS = ("asiatico", "medieval", "cyberpunk", "espaco", "estacoes")
+from typing import Literal, get_args
 
 Hall = Literal["asiatico", "medieval", "cyberpunk", "espaco", "estacoes"]
+HALLS = get_args(Hall)
 
 HALL_NAMES = {
     "asiatico": "Salão Asiático",
@@ -16,5 +15,8 @@ HALL_NAMES = {
 SEASONS = ("primavera", "verao", "outono", "inverno")
 SEASON_SECONDS = 120
 
+#column sizes, shared by models and schemas
+HALL_MAX_LENGTH = 20
+USERNAME_MAX_LENGTH = 20
 TITLE_MAX_LENGTH = 80
 CONTENT_MAX_LENGTH = 1000
