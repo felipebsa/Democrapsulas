@@ -1,5 +1,5 @@
 from typing import Literal
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -7,14 +7,9 @@ from app.models.capsule import Capsule
 from app.models.report import Report
 from app.core.security import get_current_admin
 from app.schemas.admin import SchemaAdminCapsule
+from app.services.capsule import get_capsule_or_404
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
-
-def get_capsule_or_404(db: Session, capsule_id: int) -> Capsule:
-    capsule = db.get(Capsule, capsule_id)
-    if not capsule:
-        raise HTTPException(status_code=404, detail="Capsule not found")
-    return capsule
 
 def to_admin_capsule(db: Session, capsule: Capsule) -> SchemaAdminCapsule:
     reasons_query = select(Report.reason).where(Report.capsule_id == capsule.id).order_by(Report.created)

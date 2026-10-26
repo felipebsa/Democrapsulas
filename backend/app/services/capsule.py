@@ -55,11 +55,16 @@ def serialize_capsule(db: Session, capsule: Capsule, user: User | None) -> Schem
     return serialize_capsules(db, [capsule], user)[0]
 
 
-#private and hidden capsules only exist for their owner (and admins)
-def get_visible_capsule(db: Session, capsule_id: int, user: User | None) -> Capsule:
+def get_capsule_or_404(db: Session, capsule_id: int) -> Capsule:
     capsule = db.get(Capsule, capsule_id)
     if not capsule:
         raise HTTPException(status_code=404, detail="Capsule not found")
+    return capsule
+
+
+#private and hidden capsules only exist for their owner (and admins)
+def get_visible_capsule(db: Session, capsule_id: int, user: User | None) -> Capsule:
+    capsule = get_capsule_or_404(db, capsule_id)
 
     is_mine = user is not None and capsule.user_id == user.id
     is_admin = user is not None and user.is_admin
@@ -67,6 +72,12 @@ def get_visible_capsule(db: Session, capsule_id: int, user: User | None) -> Caps
         raise HTTPException(status_code=404, detail="Capsule not found")
 
     return capsule
+
+
+#the user's vote, favorite or report on a capsule (model is Vote, Favorite or Report)
+def find_user_row(db: Session, model, user: User, capsule: Capsule):
+    query = select(model).where(model.user_id == user.id, model.capsule_id == capsule.id)
+    return db.execute(query).scalar_one_or_none()
 
 
 def require_open(capsule: Capsule):

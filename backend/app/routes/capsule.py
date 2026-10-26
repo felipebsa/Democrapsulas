@@ -12,7 +12,9 @@ from app.core.constants import Hall
 from app.core.profanity import contains_bad_words
 from app.core.security import get_current_user, get_optional_user
 from app.schemas.capsule import SchemaCapsuleCreate, SchemaCapsuleResponse, SchemaVote, SchemaReport
-from app.services.capsule import now_utc, serialize_capsule, serialize_capsules, get_visible_capsule, require_open
+from app.services.capsule import (
+    now_utc, serialize_capsule, serialize_capsules, get_capsule_or_404, get_visible_capsule, find_user_row, require_open,
+)
 
 router = APIRouter(prefix="/capsules", tags=["capsules"])
 
@@ -82,8 +84,8 @@ def get_capsule(capsule_id: int, db: Session = Depends(get_db), c_user=Depends(g
 
 @router.delete("/{capsule_id}", status_code=204)
 def delete_capsule(capsule_id: int, db: Session = Depends(get_db), c_user=Depends(get_current_user)):
-    capsule = db.get(Capsule, capsule_id)
-    if not capsule or capsule.user_id != c_user.id:
+    capsule = get_capsule_or_404(db, capsule_id)
+    if capsule.user_id != c_user.id:
         raise HTTPException(status_code=404, detail="Capsule not found")
 
     db.delete(capsule)
@@ -96,8 +98,7 @@ def vote_capsule(capsule_id: int, vote: SchemaVote, db: Session = Depends(get_db
     capsule = get_visible_capsule(db, capsule_id, c_user)
     require_open(capsule)
 
-    query = select(Vote).where(Vote.user_id == c_user.id, Vote.capsule_id == capsule.id)
-    existing_vote = db.execute(query).scalar_one_or_none()
+    existing_vote = find_user_row(db, Vote, c_user, capsule)
     if existing_vote:
         existing_vote.value = vote.value
     else:
@@ -109,8 +110,7 @@ def vote_capsule(capsule_id: int, vote: SchemaVote, db: Session = Depends(get_db
 def remove_vote(capsule_id: int, db: Session = Depends(get_db), c_user=Depends(get_current_user)):
     capsule = get_visible_capsule(db, capsule_id, c_user)
 
-    query = select(Vote).where(Vote.user_id == c_user.id, Vote.capsule_id == capsule.id)
-    existing_vote = db.execute(query).scalar_one_or_none()
+    existing_vote = find_user_row(db, Vote, c_user, capsule)
     if existing_vote:
         db.delete(existing_vote)
         db.commit()
@@ -121,8 +121,7 @@ def favorite_capsule(capsule_id: int, db: Session = Depends(get_db), c_user=Depe
     capsule = get_visible_capsule(db, capsule_id, c_user)
     require_open(capsule)
 
-    query = select(Favorite).where(Favorite.user_id == c_user.id, Favorite.capsule_id == capsule.id)
-    if not db.execute(query).scalar_one_or_none():
+    if not find_user_row(db, Favorite, c_user, capsule):
         db.add(Favorite(user_id=c_user.id, capsule_id=capsule.id))
         db.commit()
     return serialize_capsule(db, capsule, c_user)
@@ -131,8 +130,7 @@ def favorite_capsule(capsule_id: int, db: Session = Depends(get_db), c_user=Depe
 def unfavorite_capsule(capsule_id: int, db: Session = Depends(get_db), c_user=Depends(get_current_user)):
     capsule = get_visible_capsule(db, capsule_id, c_user)
 
-    query = select(Favorite).where(Favorite.user_id == c_user.id, Favorite.capsule_id == capsule.id)
-    favorite = db.execute(query).scalar_one_or_none()
+    favorite = find_user_row(db, Favorite, c_user, capsule)
     if favorite:
         db.delete(favorite)
         db.commit()
@@ -143,8 +141,7 @@ def report_capsule(capsule_id: int, report: SchemaReport, db: Session = Depends(
     capsule = get_visible_capsule(db, capsule_id, c_user)
     require_open(capsule)
 
-    query = select(Report).where(Report.user_id == c_user.id, Report.capsule_id == capsule.id)
-    if db.execute(query).scalar_one_or_none():
+    if find_user_row(db, Report, c_user, capsule):
         raise HTTPException(status_code=409, detail="Capsule already reported")
 
     db.add(Report(user_id=c_user.id, capsule_id=capsule.id, reason=report.reason))
