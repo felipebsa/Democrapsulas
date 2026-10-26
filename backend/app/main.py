@@ -7,6 +7,7 @@ from app.routes.capsule import router as capsule_router
 from app.routes.me import router as me_router
 from app.routes.stats import router as stats_router
 from app.routes.hall import router as hall_router
+from app.routes.admin import router as admin_router
 
 
 app = FastAPI(title="Democrápsulas API")
@@ -25,3 +26,4 @@ app.include_router(capsule_router)
 app.include_router(me_router)
 app.include_router(stats_router)
 app.include_router(hall_router)
+app.include_router(admin_router)

@@ -48,6 +48,11 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
     return user
 
+def get_current_admin(c_user: User = Depends(get_current_user)):
+    if not c_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin only")
+    return c_user
+
 #for public routes: returns None instead of 401 when there is no valid token
 def get_optional_user(token: str | None = Depends(oauth2_scheme_optional), db: Session = Depends(get_db)):
     if not token:
