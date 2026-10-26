@@ -58,6 +58,23 @@ def list_hall_capsules(hall: Hall, db: Session = Depends(get_db), c_user=Depends
     capsules = db.execute(query).scalars().all()
     return serialize_capsules(db, capsules, c_user)
 
+#roulette: one random capsule that is already open (must stay above /{capsule_id})
+@router.get("/random", response_model=SchemaCapsuleResponse)
+def random_capsule(hall: Hall | None = None, db: Session = Depends(get_db), c_user=Depends(get_optional_user)):
+    query = (
+        select(Capsule)
+        .where(Capsule.is_private == False, Capsule.is_hidden == False, Capsule.open_at <= now_utc())
+        .order_by(func.random())
+        .limit(1)
+    )
+    if hall:
+        query = query.where(Capsule.hall == hall)
+
+    capsule = db.execute(query).scalar_one_or_none()
+    if not capsule:
+        raise HTTPException(status_code=404, detail="No open capsule yet")
+    return serialize_capsule(db, capsule, c_user)
+
 @router.get("/{capsule_id}", response_model=SchemaCapsuleResponse)
 def get_capsule(capsule_id: int, db: Session = Depends(get_db), c_user=Depends(get_optional_user)):
     capsule = get_visible_capsule(db, capsule_id, c_user)

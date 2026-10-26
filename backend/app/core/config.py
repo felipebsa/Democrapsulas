@@ -14,5 +14,6 @@ class Settings(BaseSettings):
     CAPSULE_COOLDOWN_SECONDS: int = 120
     HALL_CAPSULE_LIMIT: int = 30
     REPORTS_TO_HIDE: int = 5
+    RANKING_LIMIT: int = 20
 
 settings = Settings()

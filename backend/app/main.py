@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth import router as auth_router
 from app.routes.capsule import router as capsule_router
 from app.routes.me import router as me_router
+from app.routes.stats import router as stats_router
 
 
 app = FastAPI(title="Democrápsulas API")
@@ -21,3 +22,4 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(capsule_router)
 app.include_router(me_router)
+app.include_router(stats_router)
