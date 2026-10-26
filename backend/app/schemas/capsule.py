@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 from app.core.constants import Hall, TITLE_MAX_LENGTH, CONTENT_MAX_LENGTH
 
@@ -24,3 +25,14 @@ class SchemaCapsuleResponse(BaseModel):
     title: str | None
     content: str | None
     author: str | None
+    score: int
+    my_vote: int | None
+    is_favorite: bool
+
+
+class SchemaVote(BaseModel):
+    value: Literal[1, -1]
+
+
+class SchemaReport(BaseModel):
+    reason: str | None = Field(default=None, max_length=200)

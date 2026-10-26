@@ -1,8 +1,11 @@
 from datetime import datetime, timezone
 from fastapi import HTTPException
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 from app.models.capsule import Capsule
 from app.models.user import User
+from app.models.vote import Vote
+from app.models.favorite import Favorite
 from app.schemas.capsule import SchemaCapsuleResponse
 
 
@@ -12,6 +15,19 @@ def now_utc() -> datetime:
 
 def serialize_capsules(db: Session, capsules: list[Capsule], user: User | None) -> list[SchemaCapsuleResponse]:
     now = now_utc()
+    ids = [capsule.id for capsule in capsules]
+
+    #a few queries for the whole list instead of one per capsule
+    score_query = select(Vote.capsule_id, func.sum(Vote.value)).where(Vote.capsule_id.in_(ids)).group_by(Vote.capsule_id)
+    scores = dict(db.execute(score_query).all())
+    my_votes = {}
+    favorites = set()
+    if user is not None:
+        vote_query = select(Vote.capsule_id, Vote.value).where(Vote.user_id == user.id, Vote.capsule_id.in_(ids))
+        my_votes = dict(db.execute(vote_query).all())
+        favorite_query = select(Favorite.capsule_id).where(Favorite.user_id == user.id, Favorite.capsule_id.in_(ids))
+        favorites = set(db.execute(favorite_query).scalars().all())
+
     result = []
     for capsule in capsules:
         is_open = capsule.open_at <= now
@@ -28,6 +44,9 @@ def serialize_capsules(db: Session, capsules: list[Capsule], user: User | None) 
             title=capsule.title if reveal else None,
             content=capsule.content if reveal else None,
             author=capsule.author.name if reveal else None,
+            score=scores.get(capsule.id, 0),
+            my_vote=my_votes.get(capsule.id),
+            is_favorite=capsule.id in favorites,
         ))
     return result
 
