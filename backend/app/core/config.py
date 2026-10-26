@@ -9,4 +9,11 @@ class Settings(BaseSettings):
     TOKEN_EXPIRED: int
     DATABASE_URL: str
 
+    #capsule limits
+    TITLE_MAX_LENGTH: int = 80
+    CONTENT_MAX_LENGTH: int = 1000
+    CAPSULES_PER_DAY: int = 5
+    CAPSULE_COOLDOWN_SECONDS: int = 120
+    HALL_CAPSULE_LIMIT: int = 30
+
 settings = Settings()

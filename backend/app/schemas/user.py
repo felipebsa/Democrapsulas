@@ -1,9 +1,9 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
 
 class SchemaUserCreate(BaseModel):
-    name: str
-    password: str
+    name: str = Field(min_length=3, max_length=20, pattern=r"^[A-Za-z0-9_]+$")
+    password: str = Field(min_length=6, max_length=128)
 
 class SchemaUserResponse(BaseModel):
     id: int
