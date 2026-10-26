@@ -4,3 +4,4 @@ from app.models.capsule import Capsule
 from app.models.vote import Vote
 from app.models.favorite import Favorite
 from app.models.report import Report
+from app.models.song import Song, SongVote
