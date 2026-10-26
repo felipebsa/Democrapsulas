@@ -65,7 +65,10 @@ O servidor é uma API em Python com FastAPI e banco PostgreSQL, com autenticaç�
 - [x] Estrutura do servidor com FastAPI, PostgreSQL e Docker
 - [x] Contas: cadastro, login com token e rota da conta logada
 - [x] Migrations do banco com Alembic
-- [ ] Rotas da API para criar e abrir lâmpadas
+- [x] Rotas da API para criar e abrir lâmpadas
+- [x] API de votos, favoritos, denúncias, roleta, ranking, dados do site e moderação
+- [x] API da votação semanal de músicas e do relógio do Salão das Estações
+- [x] Testes automáticos do servidor
 - [ ] Combinar o contrato da API e definir o visual dos salões
 - [ ] Montar a estrutura das páginas em HTML e CSS, com modo claro e escuro
 - [ ] Lâmpadas subindo, cronômetros e criar/abrir lâmpadas, usando dados de exemplo
@@ -102,9 +105,70 @@ Por enquanto só o servidor roda. O site ainda está em construção. Você prec
    uvicorn app.main:app --reload
    ```
 
-A documentação interativa da API abre em http://localhost:8000/docs. Lá dá para testar `POST /auth/register`, `POST /auth/login` e `GET /auth/me`.
+A documentação interativa da API abre em http://localhost:8000/docs. Lá dá para testar todas as rotas. Para as que pedem login, clique em **Authorize** e entre com apelido e senha.
 
-Para subir a API e o banco juntos no Docker, rode `docker compose up -d --build` na raiz do projeto. As tabelas precisam existir antes, então faça o passo 3 pelo menos uma vez.
+Para subir a API e o banco juntos no Docker, rode `docker compose up -d --build` na raiz do projeto. Nesse caso a API cria e atualiza as tabelas sozinha ao iniciar.
+
+### Testes
+
+Com o banco rodando, dentro de `backend`:
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+Os testes usam um banco separado (`democrapsulas_test`), criado automaticamente no mesmo PostgreSQL, então não apagam nada do banco de desenvolvimento.
+
+### Administrador
+
+Para moderar lâmpadas denunciadas, transforme uma conta existente em admin (dentro de `backend`):
+
+```bash
+python -m app.scripts.make_admin <apelido>
+```
+
+Com o Docker: `docker compose exec api python -m app.scripts.make_admin <apelido>`.
+
+## Rotas da API
+
+Rotas marcadas com 🔒 precisam do token (`Authorization: Bearer <token>`). As outras funcionam sem login, mas, se o token for enviado, a resposta diz se a lâmpada é sua, qual foi seu voto e se está nos favoritos.
+
+| Método | Rota | O que faz |
+| --- | --- | --- |
+| POST | `/auth/register` | Cria conta (apelido de 3 a 20 letras, números ou `_`; senha com 6 ou mais caracteres) |
+| POST | `/auth/login` | Devolve o token (formulário com `username` e `password`) |
+| GET 🔒 | `/auth/me` | Dados da conta logada |
+| POST 🔒 | `/capsules` | Cria lâmpada: `hall`, `title`, `content`, `is_private`, `open_at` (com fuso, ex.: `2027-01-01T00:00:00-03:00`) |
+| GET | `/capsules?hall=asiatico` | Até 30 lâmpadas públicas sorteadas do salão |
+| GET | `/capsules/random` | Roleta: uma lâmpada já liberada (aceita `?hall=`) |
+| GET | `/capsules/{id}` | Uma lâmpada |
+| DELETE 🔒 | `/capsules/{id}` | Apaga sua lâmpada |
+| PUT 🔒 | `/capsules/{id}/vote` | Vota `{"value": 1}` ou `{"value": -1}` (pode trocar) |
+| DELETE 🔒 | `/capsules/{id}/vote` | Tira o voto |
+| PUT / DELETE 🔒 | `/capsules/{id}/favorite` | Marca ou desmarca a estrela |
+| POST 🔒 | `/capsules/{id}/report` | Denuncia (`{"reason": "..."}` opcional) |
+| GET 🔒 | `/me/capsules` | Suas lâmpadas, incluindo privadas |
+| GET 🔒 | `/me/favorites` | Galeria (suas favoritas) |
+| GET | `/ranking` | Lâmpadas mais votadas (aceita `?hall=` e `?limit=`) |
+| GET | `/stats` | Dados do site |
+| GET | `/halls` | Lista dos salões |
+| GET | `/halls/estacoes/season` | Estação atual do Salão das Estações e quanto falta para trocar |
+| GET | `/halls/{salão}/songs` | Músicas candidatas e votos da semana atual |
+| PUT 🔒 | `/halls/{salão}/songs/vote` | Vota numa música `{"song_id": 1}` (pode trocar) |
+| GET | `/halls/{salão}/track` | Música que o salão toca: a vencedora da semana passada |
+| GET 🔒 | `/admin/capsules?status=hidden` | Admin: lâmpadas ocultas (ou `reported`, denunciadas e ainda visíveis) |
+| POST 🔒 | `/admin/capsules/{id}/approve` | Admin: libera a lâmpada e zera as denúncias |
+| POST 🔒 | `/admin/capsules/{id}/hide` | Admin: oculta a lâmpada |
+| DELETE 🔒 | `/admin/capsules/{id}` | Admin: apaga a lâmpada |
+
+Os salões são `asiatico`, `medieval`, `cyberpunk`, `espaco` e `estacoes`.
+
+Antes da data de abertura, `title`, `content` e `author` vêm como `null` para todo mundo, menos para quem criou. O campo `is_open` diz se a lâmpada já pode ser lida.
+
+A semana da votação de músicas vai de segunda 00:00 a domingo 23:59, no horário de Brasília. As músicas cadastradas por enquanto são provisórias ("Faixa 1", "Faixa 2" e "Faixa 3" em cada salão, com arquivos em `audio/<salão>/faixa-N.mp3`).
+
+As palavras bloqueadas ficam em `backend/app/core/bad_words.txt`, uma por linha. Os limites podem ser mudados no `.env` (veja o `.env.example`).
 
 Depois de mudar um model, gere uma migration nova e aplique:
 
