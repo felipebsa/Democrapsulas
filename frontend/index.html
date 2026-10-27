@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Democrápsulas</title>
+  <meta name="description" content="Escreva uma mensagem pro futuro e guarde numa lâmpada.">
+  <link rel="icon" href="img/lanterna-asiatica.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&family=VT323&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- aplica o tema salvo antes de desenhar a página, pra não piscar -->
+  <script>
+    try {
+      if (localStorage.getItem("tema") === "claro") document.documentElement.classList.add("claro");
+    } catch (e) {}
+  </script>
+</head>
+<body>
+
+  <!-- ================= FUNDO VIVO (todas as páginas) ================= -->
+  <div class="fundo" aria-hidden="true">
+    <div class="fundo__camada" id="fundo-camada">
+      <div class="fundo__img fundo__img--noite"></div>
+      <div class="fundo__img fundo__img--dia"></div>
+    </div>
+    <div class="fundo__veu"></div>
+    <div class="fundo__fantasmas" id="fantasmas"></div>
+  </div>
+
+  <!-- ================= TELA DE ENTRADA ================= -->
+  <section class="entrada" id="tela-entrada" hidden>
+    <div class="entrada__miolo">
+      <div class="entrada__brilho" aria-hidden="true"></div>
+      <h1 class="entrada__titulo surgir" style="--atraso: 0ms">
+        <img src="img/titulo.png" alt="Democrápsulas">
+      </h1>
+      <p class="entrada__contador surgir" style="--atraso: 250ms">
+        <b id="stat-criadas">—</b> lâmpadas criadas
+      </p>
+      <button class="btn-iniciar surgir" id="btn-iniciar" style="--atraso: 450ms">Iniciar</button>
+    </div>
+
+    <p class="entrada__dica surgir" style="--atraso: 450ms">
+      <svg class="ic"><use href="#i-som"/></svg> melhor com som ligado
+    </p>
+    <p class="entrada__abertas surgir" style="--atraso: 250ms">
+      <b id="stat-abertas">—</b> já abertas
+    </p>
+  </section>
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="nav" id="navbar" hidden>
+    <a class="nav__logo" href="#/salao/asiatico" aria-label="Ir pro Salão Asiático">
+      <img src="img/titulo.png" alt="Democrápsulas">
+    </a>
+
+    <nav class="nav__links" aria-label="Navegação principal">
+      <div class="dropdown" id="dropdown-saloes">
+        <button class="pilula" data-rota="salao" aria-haspopup="true" aria-expanded="false" id="btn-saloes">
+          <svg class="ic"><use href="#i-salao"/></svg>Salões<svg class="ic ic--seta"><use href="#i-seta"/></svg>
+        </button>
+        <div class="dropdown__menu" role="menu">
+          <a role="menuitem" href="#/salao/asiatico">Asiático</a>
+          <a role="menuitem" href="#/salao/medieval">Medieval</a>
+          <a role="menuitem" href="#/salao/cyberpunk">Cyberpunk</a>
+          <a role="menuitem" href="#/salao/espaco">Espaço</a>
+          <a role="menuitem" href="#/salao/estacoes">Estações</a>
+        </div>
+      </div>
+      <a class="pilula" data-rota="criar" href="#/criar"><svg class="ic"><use href="#i-mais"/></svg>Criar Lâmpada</a>
+      <a class="pilula" data-rota="roleta" href="#/roleta"><svg class="ic"><use href="#i-roleta"/></svg>Roleta</a>
+      <a class="pilula" data-rota="galeria" href="#/galeria"><svg class="ic"><use href="#i-estrela"/></svg>Galeria</a>
+      <a class="pilula" data-rota="ranking" href="#/ranking"><svg class="ic"><use href="#i-trofeu"/></svg>Ranking</a>
+      <a class="pilula" data-rota="votacao" href="#/votacao"><svg class="ic"><use href="#i-musica"/></svg>Votação</a>
+    </nav>
+
+    <div class="nav__dir">
+      <button class="icone" id="btn-som" aria-label="Desligar som" aria-pressed="true">
+        <svg class="ic"><use href="#i-som"/></svg>
+      </button>
+      <button class="icone" id="btn-tema" aria-label="Mudar pro modo claro">
+        <svg class="ic"><use href="#i-sol"/></svg>
+      </button>
+      <button class="icone nav__hamburguer" id="btn-menu" aria-label="Abrir menu" aria-expanded="false">
+        <svg class="ic"><use href="#i-menu"/></svg>
+      </button>
+
+      <button class="btn-entrar" id="btn-entrar">Entrar</button>
+
+      <div class="dropdown dropdown--direita" id="menu-usuario" hidden>
+        <button class="usuario" id="btn-usuario" aria-haspopup="true" aria-expanded="false">
+          <svg class="ic"><use href="#i-usuario"/></svg><span id="nome-usuario"></span><svg class="ic ic--seta"><use href="#i-seta"/></svg>
+        </button>
+        <div class="dropdown__menu" role="menu">
+          <a role="menuitem" href="#/conta">Minha Conta</a>
+          <button role="menuitem" id="btn-sair">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- painel do celular -->
+    <nav class="nav__painel" id="painel-menu" aria-label="Navegação móvel">
+      <p class="nav__painel-titulo">Salões</p>
+      <div class="nav__painel-grade">
+        <a href="#/salao/asiatico">Asiático</a>
+        <a href="#/salao/medieval">Medieval</a>
+        <a href="#/salao/cyberpunk">Cyberpunk</a>
+        <a href="#/salao/espaco">Espaço</a>
+        <a href="#/salao/estacoes">Estações</a>
+      </div>
+      <p class="nav__painel-titulo">Páginas</p>
+      <div class="nav__painel-grade">
+        <a href="#/criar">Criar Lâmpada</a>
+        <a href="#/roleta">Roleta</a>
+        <a href="#/galeria">Galeria</a>
+        <a href="#/ranking">Ranking</a>
+        <a href="#/votacao">Votação</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= PÁGINAS ================= -->
+  <main class="pagina" id="pagina-salao" hidden>
+    <div class="salao__cabeca">
+      <p class="salao__tag">Salão</p>
+      <h1 class="salao__nome" id="salao-nome">Asiático</h1>
+      <p class="salao__info" id="salao-info">carregando lâmpadas…</p>
+    </div>
+
+    <div class="salao__ceu" id="salao-ceu"></div>
+
+    <div class="info" id="info">
+      <aside class="info__pop" id="info-pop" role="dialog" aria-labelledby="info-titulo" hidden>
+        <h2 id="info-titulo">Como funciona</h2>
+        <p>Cada lâmpada guarda uma mensagem. Quando o cronômetro zera, ela acende e qualquer um pode ler.</p>
+      </aside>
+      <button class="info__btn" id="info-btn" aria-label="Como funciona" aria-expanded="false" aria-controls="info-pop">i</button>
+    </div>
+  </main>
+
+  <!-- ================= CRIAR LÂMPADA ================= -->
+  <main class="pagina pagina--rolavel" id="pagina-criar" hidden>
+    <div class="criar">
+      <header class="pagina__cabeca">
+        <p class="salao__tag">Criar lâmpada</p>
+        <h1 class="pagina__titulo">Uma mensagem pro futuro</h1>
+        <p class="pagina__texto">Escreve, escolhe quando ela abre e solta no salão. Até lá, ninguém consegue ler.</p>
+      </header>
+
+      <div class="criar__grade">
+        <form class="card criar__form" id="form-criar" novalidate>
+          <div class="campo-grupo">
+            <label for="criar-salao">Salão</label>
+            <select class="campo" id="criar-salao">
+              <option value="asiatico">Asiático</option>
+              <option value="medieval" disabled>Medieval (em breve)</option>
+              <option value="cyberpunk" disabled>Cyberpunk (em breve)</option>
+              <option value="espaco" disabled>Espaço (em breve)</option>
+              <option value="estacoes" disabled>Estações (em breve)</option>
+            </select>
+          </div>
+
+          <div class="campo-grupo">
+            <div class="rotulo-linha">
+              <label for="criar-titulo">Título</label>
+              <span class="contagem" id="conta-titulo">0/80</span>
+            </div>
+            <input class="campo" id="criar-titulo" maxlength="80" placeholder="Pra mim daqui um ano" required>
+          </div>
+
+          <div class="campo-grupo">
+            <div class="rotulo-linha">
+              <label for="criar-texto">Mensagem</label>
+              <span class="contagem" id="conta-texto">0/1000</span>
+            </div>
+            <textarea class="campo campo--texto" id="criar-texto" maxlength="1000" rows="6" placeholder="O que você quer dizer pra quem abrir essa lâmpada?" required></textarea>
+          </div>
+
+          <fieldset class="campo-grupo">
+            <legend>Abre daqui a</legend>
+            <div class="tempo-livre" id="tempo-livre">
+              <label class="tempo-livre__item">
+                <input class="campo" id="criar-dias" type="number" min="0" step="1" inputmode="numeric" value="1">
+                <span>dias</span>
+              </label>
+              <label class="tempo-livre__item">
+                <input class="campo" id="criar-horas" type="number" min="0" step="1" inputmode="numeric" value="0">
+                <span>horas</span>
+              </label>
+              <label class="tempo-livre__item">
+                <input class="campo" id="criar-minutos" type="number" min="0" step="1" inputmode="numeric" value="0">
+                <span>minutos</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="campo-grupo">
+            <legend>Quem pode ler</legend>
+            <div class="opcoes">
+              <label class="opcao">
+                <input type="radio" name="visibilidade" value="publica" checked>
+                <span><b>Pública</b>sobe no salão e qualquer um lê quando abrir</span>
+              </label>
+              <label class="opcao opcao--embreve" aria-disabled="true">
+                <input type="radio" name="visibilidade" value="privada" disabled>
+                <span><b>Privada <em class="selo">em breve</em></b>não aparece no salão, só você lê</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <p class="erro" id="criar-erro" role="alert"></p>
+          <button class="btn-cheio" type="submit" id="criar-enviar">Soltar lâmpada</button>
+          <p class="ajuda ajuda--centro">Dá pra criar até 5 por dia, com 2 minutos entre uma e outra.</p>
+        </form>
+
+        <aside class="card criar__previa" aria-label="Prévia da lâmpada">
+          <p class="criar__previa-tag">Prévia</p>
+          <div class="criar__palco" id="criar-palco">
+            <div class="criar__lampada" id="criar-lampada">
+              <img class="lampada__img lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+              <span class="lampada__tempo" id="criar-tempo">1d 00h</span>
+            </div>
+          </div>
+          <p class="criar__abre" id="criar-abre">abre amanhã</p>
+        </aside>
+      </div>
+    </div>
+
+    <!-- depois de criar -->
+    <div class="pagina--centro criar__pronto" id="criar-pronto" hidden>
+      <div class="card card--embreve">
+        <img class="card__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+        <p class="card__tag">Lâmpada solta</p>
+        <h2 class="card__titulo">Ela tá subindo</h2>
+        <p class="card__texto" id="pronto-texto"></p>
+        <div class="botoes">
+          <a class="btn-cheio btn-cheio--auto" href="#/salao/asiatico">Ver no salão</a>
+          <button class="btn-borda" id="btn-criar-outra">Criar outra</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= ROLETA ================= -->
+  <main class="pagina pagina--rolavel" id="pagina-roleta" hidden>
+    <div class="roleta">
+      <header class="pagina__cabeca pagina__cabeca--centro">
+        <p class="salao__tag">Roleta</p>
+        <h1 class="pagina__titulo">Abre uma lâmpada qualquer</h1>
+        <p class="pagina__texto">Gira e lê a mensagem de alguém que já abriu.</p>
+      </header>
+
+      <div class="roleta__janela" id="roleta-janela" aria-hidden="true">
+        <div class="roleta__faixa" id="roleta-faixa"></div>
+        <div class="roleta__mira"></div>
+      </div>
+
+      <div class="roleta__acoes">
+        <button class="btn-iniciar btn-girar" id="btn-girar">Girar</button>
+      </div>
+
+      <article class="card roleta__resultado" id="roleta-resultado" hidden aria-live="polite">
+        <p class="card__tag" id="roleta-info"></p>
+        <h2 class="roleta__titulo" id="roleta-titulo"></h2>
+        <p class="ler__texto" id="roleta-texto"></p>
+      </article>
+    </div>
+  </main>
+
+  <!-- salões que ainda não existem e as outras páginas usam esse card -->
+  <main class="pagina pagina--centro" id="pagina-embreve" hidden>
+    <div class="card card--embreve">
+      <img class="card__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+      <p class="card__tag" id="embreve-tag">Roleta</p>
+      <h1 class="card__titulo">Em breve</h1>
+      <p class="card__texto">Essa parte chega nas próximas etapas.</p>
+    </div>
+  </main>
+
+  <!-- ================= MODAL ENTRAR / CRIAR CONTA ================= -->
+  <div class="modal-fundo" id="modal-auth" hidden>
+    <div class="modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="auth-titulo">
+      <button class="modal__fechar icone" id="auth-fechar" aria-label="Fechar">
+        <svg class="ic"><use href="#i-x"/></svg>
+      </button>
+      <img class="modal__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+      <h2 id="auth-titulo">Bem-vindo de volta</h2>
+      <p class="modal__sub" id="auth-sub">Entre pra guardar suas mensagens nas lâmpadas.</p>
+
+      <div class="abas" role="tablist">
+        <button class="aba ativa" role="tab" aria-selected="true" data-aba="entrar">Entrar</button>
+        <button class="aba" role="tab" aria-selected="false" data-aba="criar">Criar conta</button>
+      </div>
+
+      <form id="form-auth" novalidate>
+        <label for="campo-apelido">Apelido</label>
+        <input class="campo" id="campo-apelido" name="apelido" autocomplete="username" maxlength="20" required>
+        <p class="ajuda">3 a 20 caracteres: letras, números e _</p>
+
+        <label for="campo-senha">Senha</label>
+        <input class="campo" id="campo-senha" name="senha" type="password" autocomplete="current-password" required>
+        <p class="ajuda">mínimo de 6 caracteres</p>
+
+        <p class="erro" id="auth-erro" role="alert"></p>
+        <button class="btn-cheio" type="submit" id="auth-enviar">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL LER LÂMPADA ================= -->
+  <div class="modal-fundo" id="modal-ler" hidden>
+    <div class="modal modal--ler" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="ler-titulo">
+      <button class="modal__fechar icone" data-fechar aria-label="Fechar">
+        <svg class="ic"><use href="#i-x"/></svg>
+      </button>
+      <img class="modal__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+      <h2 id="ler-titulo"></h2>
+      <p class="modal__sub" id="ler-info"></p>
+      <p class="ler__texto" id="ler-texto"></p>
+    </div>
+  </div>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+  <!-- ================= ÍCONES (traço no estilo lucide) ================= -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-salao" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></symbol>
+      <symbol id="i-mais" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-roleta" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></symbol>
+      <symbol id="i-estrela" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/></symbol>
+      <symbol id="i-trofeu" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></symbol>
+      <symbol id="i-musica" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+      <symbol id="i-som" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+      <symbol id="i-mudo" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="m22 9-6 6M16 9l6 6"/></symbol>
+      <symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-lua" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-seta" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    </defs>
+  </svg>
+
+  <script src="js/api.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/interface.js"></script>
+  <script src="js/salao.js"></script>
+  <script src="js/criar.js"></script>
+  <script src="js/roleta.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
