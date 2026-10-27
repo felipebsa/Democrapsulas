@@ -4,112 +4,327 @@
 
 </p>
 
-# Democrápsulas
+**Status:** servidor completo (API, autenticação, migrations, testes e Docker) e primeira versão do site no ar localmente, com tela de entrada, Salão Asiático, Criar Lâmpada e Roleta.
 
-Um site onde as pessoas escrevem mensagens para o futuro e guardam dentro de lâmpadas. Cada lâmpada sobe pela tela com um cronômetro embaixo, e ninguém consegue ler o que está escrito até o tempo acabar. Quando chega a zero, qualquer visitante pode abrir a lâmpada, ler a mensagem e ver quem escreveu e em que dia.
+Site de mensagens para o futuro: cada pessoa escreve uma mensagem, guarda dentro de uma lâmpada e só deixa ela ser lida quando o cronômetro chegar a zero.
+
+---
+
+## Visão geral
+
+Democrápsulas é um site onde as pessoas escrevem mensagens para o futuro e guardam dentro de lâmpadas. Cada lâmpada sobe pela tela com um cronômetro embaixo, e ninguém consegue ler o que está escrito até o tempo acabar. Quando chega a zero, qualquer visitante pode abrir a lâmpada, ler a mensagem e ver quem escreveu e em que dia.
 
 O "democráticas" do nome vem do fato de que a comunidade decide algumas coisas: os votos escolhem a música de cada salão, e as lâmpadas mais votadas sobem no ranking.
 
-O projeto ainda está em desenvolvimento. Começamos pelo planejamento e vamos construindo as páginas por etapas.
+Quem entra no site pode só olhar as lâmpadas subindo e abrir as que já foram liberadas. Para criar, votar, favoritar ou denunciar, precisa de uma conta, que usa só apelido e senha, sem e-mail e sem nome real.
 
-## Como o site funciona
+O texto de uma lâmpada só sai do servidor depois que a data de abertura passa. Assim ninguém consegue ler antes da hora olhando o código da página ou mudando o relógio do computador.
 
-Quem entra no site pode ficar só olhando as lâmpadas subirem e abrindo as que já foram liberadas. Para criar lâmpadas, votar, favoritar ou denunciar, precisa de uma conta. A conta usa só apelido e senha, sem e-mail e sem nome real, e o apelido é o que aparece como autor.
+O projeto foi feito **começando pelo servidor**: a API e o banco ficaram prontos antes de as páginas serem ligadas a eles.
 
-Ao criar uma lâmpada, a pessoa escreve a mensagem, escolhe em qual salão ela vai aparecer, define a data de abertura e decide se ela será pública ou privada. As privadas só aparecem para quem criou, dentro da conta.
+---
 
-Depois de aberta, cada lâmpada pode receber voto positivo ou negativo, ser marcada com uma estrela (para ir para a galeria da pessoa) ou ser denunciada.
+## Como o projeto foi feito
 
-## Os salões
+### Servidor
 
-O site tem cinco salões. A lógica é a mesma em todos e o que muda é o visual, o desenho da lâmpada e a música.
+O **servidor foi planejado e desenvolvido por Felipe Barbosa Santos**, incluindo a estrutura da API, os models do banco, a autenticação, as regras de negócio, as migrations, os testes automáticos e o ambiente Docker.
 
-O Salão Asiático é uma noite de festival com lanternas de papel, em tons de vermelho e dourado. O Medieval tem castelo, tochas e pergaminhos. O Cyberpunk é uma cidade futurista com néon e chuva. O Espaço tem nebulosas, estrelas e planetas, e as lâmpadas parecem satélites. No Salão das Estações o cenário muda de estação a cada dois minutos, ao mesmo tempo para todo mundo que estiver no site.
+Principais tecnologias:
 
-## Páginas
+**FastAPI, PostgreSQL, SQLAlchemy, Alembic, Pydantic, pytest e Docker.**
 
-1. Salão Asiático (é também a página inicial)
-2. Salão Medieval
-3. Salão Cyberpunk
-4. Salão Espaço
-5. Salão das Estações
-6. Criar Lâmpada
-7. Roleta de Lâmpadas, que sorteia uma lâmpada já liberada
-8. Galeria, com as lâmpadas favoritas de cada pessoa
-9. Ranking e Dados do Site
-10. Minha Conta
-11. Votação de Músicas
+### Front-end
 
-Todas as páginas têm botão para ligar e desligar o som e para trocar entre modo claro e escuro.
+O front-end é feito por **Gabriel Fernandes Barbarini**, com ajuda do Felipe, em HTML, CSS e JavaScript puro, sem framework e sem etapa de build. Todos os dados vêm da API. Se ela estiver desligada, as telas avisam que não conseguiram conectar.
 
-## Regras
+---
 
-O texto de uma lâmpada só é enviado pelo servidor depois que a data de abertura passa. Isso evita que alguém leia antes da hora olhando o código da página ou mudando o relógio do computador.
+## Objetivos
 
-Cada pessoa tem um voto por lâmpada, mas pode trocar depois. Também há um limite de lâmpadas criadas por dia e um tempo de espera entre uma e outra. Lâmpadas que recebem muitas denúncias ficam ocultas até a gente revisar. As mensagens têm limite de tamanho e passam por um filtro de palavras impróprias.
+É um trabalho da disciplina de Programação Web, e serviu para estudar:
 
-Para o site não ficar pesado, cada salão mostra só de 20 a 30 lâmpadas públicas por vez, sorteadas entre as que existem.
+* API REST com FastAPI
+* Autenticação com JWT
+* Migrations de banco
+* Testes automáticos
+* Desenvolvimento com Docker
+* Manipulação do DOM, eventos, `Date`, `setInterval`, `fetch`, `Audio` e `localStorage`
+* Ligar um front-end feito à mão a uma API de verdade
 
-## Votação de músicas
+---
 
-Cada salão terá músicas candidatas, três na primeira versão e cinco depois. Cada pessoa vota em uma por salão e pode mudar o voto. Quando alguém pede a trilha de um salão, o servidor calcula qual música ganhou na semana que acabou, e o salão passa a tocar essa. Se houver empate, vence a que chegou primeiro à maior pontuação.
+## Funcionalidades
+
+### Contas
+
+* [x] Cadastro e login só com apelido e senha
+* [x] Token JWT
+* [x] Senhas com hash (Argon2)
+* [x] Rotas protegidas e rotas que funcionam com ou sem login
+* [x] `GET /auth/me`
+
+### Lâmpadas
+
+* [x] Criar, listar, abrir e apagar
+* [x] Conteúdo escondido pelo servidor até a data de abertura
+* [x] Lâmpadas públicas e privadas
+* [x] Cada salão mostra até 30 lâmpadas públicas sorteadas
+* [x] Limite por dia e tempo de espera entre uma lâmpada e outra
+* [x] Limite de tamanho e filtro de palavras impróprias
+
+### Interação
+
+* [x] Voto positivo ou negativo, um por pessoa e com troca
+* [x] Favoritos (galeria de cada pessoa)
+* [x] Denúncias, com lâmpada oculta automaticamente depois de várias
+* [x] Roleta que sorteia uma lâmpada já liberada
+* [x] Ranking das mais votadas
+* [x] Dados do site (totais e lâmpadas por salão)
+
+### Salões e músicas
+
+* [x] Cinco salões: Asiático, Medieval, Cyberpunk, Espaço e Estações
+* [x] Votação semanal da música de cada salão
+* [x] Salão toca a vencedora da semana anterior
+* [x] Relógio do Salão das Estações, que troca de estação a cada dois minutos para todo mundo ao mesmo tempo
+
+### Moderação
+
+* [x] Lista de lâmpadas ocultas e denunciadas
+* [x] Aprovar ou apagar lâmpadas
+* [x] Script para transformar uma conta em admin
+
+### Infraestrutura
+
+* [x] PostgreSQL
+* [x] Migrations com Alembic
+* [x] Docker / Docker Compose
+* [x] Testes automáticos com pytest
+
+### Front-end
+
+* [x] Tela de entrada com contadores ligados a `/stats`
+* [x] Navbar com salões, som e modo claro/escuro salvos no navegador
+* [x] Entrar e criar conta ligados à API
+* [x] Salão Asiático com lâmpadas subindo e cronômetro real
+* [x] Criar Lâmpada com prévia, rascunho salvo e erros do servidor traduzidos
+* [x] Roleta de lâmpadas
+* [ ] Galeria, Ranking, Votação de Músicas e Minha Conta
+* [ ] Visual dos outros quatro salões
+* [ ] Lâmpadas privadas no site
+
+---
+
+## Modelo de dados
+
+```text
+User
+│
+├── Capsules    (lâmpadas, cada uma em um salão)
+├── Votes       (+1 ou -1 numa lâmpada)
+├── Favorites   (estrela numa lâmpada)
+├── Reports     (denúncia de uma lâmpada)
+└── SongVotes   (voto numa Song do salão, por semana)
+```
+
+Cada voto, favorito e denúncia liga uma conta a uma lâmpada, e cada pessoa só pode ter um de cada por lâmpada.
+
+---
+
+## API
+
+Rotas marcadas com 🔒 precisam do token:
+
+```http
+Authorization: Bearer <token>
+```
+
+As outras funcionam sem login, mas, se o token for enviado, a resposta diz se a lâmpada é sua, qual foi seu voto e se está nos favoritos.
+
+Documentação interativa:
+
+```text
+http://localhost:8000/docs
+```
+
+| Recurso | Rotas |
+| --- | --- |
+| Contas | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` 🔒 |
+| Lâmpadas | `POST /capsules` 🔒, `GET /capsules?hall=`, `GET /capsules/random`, `GET /capsules/{id}`, `DELETE /capsules/{id}` 🔒 |
+| Interação | `PUT/DELETE /capsules/{id}/vote` 🔒, `PUT/DELETE /capsules/{id}/favorite` 🔒, `POST /capsules/{id}/report` 🔒 |
+| Minha conta | `GET /me/capsules` 🔒, `GET /me/favorites` 🔒 |
+| Ranking e dados | `GET /ranking`, `GET /stats` |
+| Salões | `GET /halls/estacoes/season`, `GET /halls/{salão}/songs`, `PUT /halls/{salão}/songs/vote` 🔒, `GET /halls/{salão}/track` |
+| Admin | `GET /admin/capsules?status=hidden` 🔒, `POST /admin/capsules/{id}/approve` 🔒, `DELETE /admin/capsules/{id}` 🔒 |
+
+Os salões são `asiatico`, `medieval`, `cyberpunk`, `espaco` e `estacoes`.
+
+### Criar uma lâmpada
+
+```json
+{
+  "hall": "asiatico",
+  "title": "Para mim daqui a um ano",
+  "content": "...",
+  "is_private": false,
+  "open_at": "2027-01-01T00:00:00-03:00"
+}
+```
+
+A data de abertura precisa ter fuso. Antes dela, `title`, `content` e `author` vêm como `null` para todo mundo, menos para quem criou. O campo `is_open` diz se a lâmpada já pode ser lida.
+
+### Votação de músicas
+
+A semana vai de segunda 00:00 a domingo 23:59, no horário de Brasília. Quando alguém pede a trilha de um salão, o servidor calcula qual música ganhou na semana anterior. Se houver empate, vence a que chegou primeiro à maior pontuação.
+
+As músicas cadastradas por enquanto são provisórias ("Faixa 1", "Faixa 2" e "Faixa 3" em cada salão, com arquivos em `audio/<salão>/faixa-N.mp3`).
+
+---
 
 ## Tecnologias
 
-O front-end é feito com HTML, CSS e JavaScript puro. Entre os recursos de JavaScript que mais vamos usar estão manipulação do DOM, eventos, Date, setInterval, fetch, Audio e localStorage.
+### Servidor
 
-O servidor é uma API em Python com FastAPI e banco PostgreSQL, com autenticação por token JWT. O acesso ao banco usa SQLAlchemy, as tabelas são criadas com migrations do Alembic e tudo roda em contêineres com Docker Compose. O código fica no GitHub, versionado com Git.
+* Python 3
+* FastAPI
+* SQLAlchemy 2.0
+* Pydantic
+* PostgreSQL
+* Alembic
+* PyJWT e pwdlib (Argon2)
+* Pytest
+* Uvicorn
 
-## Andamento
+### Front-end
 
-- [x] Estrutura do servidor com FastAPI, PostgreSQL e Docker
-- [x] Contas: cadastro, login com token e rota da conta logada
-- [x] Migrations do banco com Alembic
-- [x] Rotas da API para criar e abrir lâmpadas
-- [x] API de votos, favoritos, denúncias, roleta, ranking, dados do site e moderação
-- [x] API da votação semanal de músicas e do relógio do Salão das Estações
-- [x] Testes automáticos do servidor
-- [ ] Combinar o contrato da API e definir o visual dos salões
-- [ ] Montar a estrutura das páginas em HTML e CSS, com modo claro e escuro
-- [ ] Lâmpadas subindo, cronômetros e criar/abrir lâmpadas, usando dados de exemplo
-- [ ] Ligar o site à API: contas, votos, favoritos e denúncias
-- [ ] Roleta, galeria, ranking e dados do site
-- [ ] Música e votação semanal
-- [ ] Testes e ajustes finais
+* HTML
+* CSS
+* JavaScript puro
 
-## Como rodar
+### Infraestrutura
 
-Por enquanto só o servidor roda. O site ainda está em construção. Você precisa de Docker e Python instalados.
+* Docker
+* Docker Compose
 
-1. Copie o `.env.example` para `.env` e troque o valor de `SECRET_KEY`.
+---
 
-2. Suba o banco, na pasta raiz do projeto:
+## Estrutura do projeto
 
-   ```bash
-   docker compose up -d db
-   ```
+```text
+backend/
+├── app/
+│   ├── core/
+│   │   ├── bad_words.txt
+│   │   ├── clock.py
+│   │   ├── config.py
+│   │   ├── constants.py
+│   │   ├── profanity.py
+│   │   └── security.py
+│   ├── models/
+│   ├── routes/
+│   ├── schemas/
+│   ├── scripts/
+│   ├── services/
+│   ├── database.py
+│   └── main.py
+├── tests/
+├── alembic/
+├── alembic.ini
+├── Dockerfile
+└── requirements.txt
 
-   O PostgreSQL fica disponível na porta 5433 do seu computador.
+frontend/
+├── audio/
+├── img/
+├── js/
+├── index.html
+└── style.css
+```
 
-3. Instale as dependências e crie as tabelas, dentro da pasta `backend`:
+---
 
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   alembic upgrade head
-   ```
+## Rodando localmente
 
-4. Inicie a API, ainda dentro de `backend`:
+### Requisitos
 
-   ```bash
-   uvicorn app.main:app --reload
-   ```
+* Python 3.12+
+* Docker
+* Docker Compose
 
-A documentação interativa da API abre em http://localhost:8000/docs. Lá dá para testar todas as rotas. Para as que pedem login, clique em **Authorize** e entre com apelido e senha.
+```bash
+git clone https://github.com/felipebsa/democrapsulas.git
+cd democrapsulas
+```
 
-Para subir a API e o banco juntos no Docker, rode `docker compose up -d --build` na raiz do projeto. Nesse caso a API cria e atualiza as tabelas sozinha ao iniciar.
+Copie o `.env.example` para `.env`, troque o valor de `SECRET_KEY` e rode:
 
-### Testes
+```bash
+docker compose up -d --build
+```
+
+A API cria e atualiza as tabelas sozinha ao iniciar.
+
+API:
+
+```text
+http://localhost:8000/docs
+```
+
+Para as rotas que pedem login, clique em **Authorize** e entre com apelido e senha.
+
+### Servidor sem Docker
+
+Suba só o banco (fica na porta 5433) e rode a API direto, dentro de `backend`:
+
+```bash
+docker compose up -d db
+cd backend
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn app.main:app --reload
+```
+
+Rode os comandos do Alembic sempre de dentro de `backend`, porque é de lá que a API lê o `.env`.
+
+### Front-end
+
+Com a API rodando, abra a pasta `frontend` com o Live Server do VS Code ou com qualquer servidor estático:
+
+```bash
+cd frontend
+python -m http.server 5500
+```
+
+Site:
+
+```text
+http://localhost:5500
+```
+
+O site usa `http://localhost:8000` por padrão. Para apontar para outra API, use `index.html?api=https://minha-api.com`.
+
+### Administrador
+
+Para moderar lâmpadas denunciadas, transforme uma conta existente em admin:
+
+```bash
+docker compose exec api python -m app.scripts.make_admin <apelido>
+```
+
+Sem Docker, dentro de `backend`: `python -m app.scripts.make_admin <apelido>`.
+
+### Configuração
+
+Os limites (lâmpadas por dia, tempo de espera, lâmpadas por salão, denúncias para ocultar e tamanho do ranking) podem ser mudados no `.env`. Veja o `.env.example`.
+
+As palavras bloqueadas ficam em `backend/app/core/bad_words.txt`, uma por linha.
+
+---
+
+## Testes
+
+Os testes usam um banco separado (`democrapsulas_test`), criado automaticamente no mesmo PostgreSQL, então não apagam nada do banco de desenvolvimento.
 
 Com o banco rodando, dentro de `backend`:
 
@@ -118,64 +333,67 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-Os testes usam um banco separado (`democrapsulas_test`), criado automaticamente no mesmo PostgreSQL, então não apagam nada do banco de desenvolvimento.
+O projeto tem **41 testes** cobrindo contas, criação e abertura de lâmpadas, votos, favoritos, denúncias, roleta, ranking, dados do site, salões, músicas, moderação e filtro de palavras.
 
-### Administrador
+Alguns cenários de segurança cobertos:
 
-Para moderar lâmpadas denunciadas, transforme uma conta existente em admin (dentro de `backend`):
+* conteúdo escondido antes da data de abertura;
+* lâmpadas privadas visíveis só para quem criou;
+* lâmpadas ocultas fora das listas públicas;
+* rotas de admin bloqueadas para contas comuns.
 
-```bash
-python -m app.scripts.make_admin <apelido>
-```
+---
 
-Com o Docker: `docker compose exec api python -m app.scripts.make_admin <apelido>`.
+## Andamento
 
-## Rotas da API
+* [x] Estrutura do servidor com FastAPI, PostgreSQL e Docker
+* [x] Contas: cadastro, login com token e rota da conta logada
+* [x] Migrations do banco com Alembic
+* [x] Rotas para criar e abrir lâmpadas
+* [x] Votos, favoritos, denúncias, roleta, ranking, dados do site e moderação
+* [x] Votação semanal de músicas e relógio do Salão das Estações
+* [x] Testes automáticos do servidor
+* [x] Estrutura das páginas em HTML e CSS, com modo claro e escuro
+* [x] Lâmpadas subindo, cronômetros e criar/abrir lâmpadas
+* [x] Contas e roleta ligadas à API
+* [ ] Votos, favoritos e denúncias no site
+* [ ] Galeria, ranking e dados do site
+* [ ] Música e votação semanal no site
+* [ ] Visual dos outros salões
+* [ ] Testes e ajustes finais
 
-Rotas marcadas com 🔒 precisam do token (`Authorization: Bearer <token>`). As outras funcionam sem login, mas, se o token for enviado, a resposta diz se a lâmpada é sua, qual foi seu voto e se está nos favoritos.
+---
 
-| Método | Rota | O que faz |
-| --- | --- | --- |
-| POST | `/auth/register` | Cria conta (apelido de 3 a 20 letras, números ou `_`; senha com 6 ou mais caracteres) |
-| POST | `/auth/login` | Devolve o token (formulário com `username` e `password`) |
-| GET 🔒 | `/auth/me` | Dados da conta logada |
-| POST 🔒 | `/capsules` | Cria lâmpada: `hall`, `title`, `content`, `is_private`, `open_at` (com fuso, ex.: `2027-01-01T00:00:00-03:00`) |
-| GET | `/capsules?hall=asiatico` | Até 30 lâmpadas públicas sorteadas do salão |
-| GET | `/capsules/random` | Roleta: uma lâmpada já liberada (aceita `?hall=`) |
-| GET | `/capsules/{id}` | Uma lâmpada |
-| DELETE 🔒 | `/capsules/{id}` | Apaga sua lâmpada |
-| PUT 🔒 | `/capsules/{id}/vote` | Vota `{"value": 1}` ou `{"value": -1}` (pode trocar) |
-| DELETE 🔒 | `/capsules/{id}/vote` | Tira o voto |
-| PUT / DELETE 🔒 | `/capsules/{id}/favorite` | Marca ou desmarca a estrela |
-| POST 🔒 | `/capsules/{id}/report` | Denuncia (`{"reason": "..."}` opcional) |
-| GET 🔒 | `/me/capsules` | Suas lâmpadas, incluindo privadas |
-| GET 🔒 | `/me/favorites` | Galeria (suas favoritas) |
-| GET | `/ranking` | Lâmpadas mais votadas (aceita `?hall=` e `?limit=`) |
-| GET | `/stats` | Dados do site |
-| GET | `/halls/estacoes/season` | Estação atual do Salão das Estações e quanto falta para trocar |
-| GET | `/halls/{salão}/songs` | Músicas candidatas e votos da semana atual |
-| PUT 🔒 | `/halls/{salão}/songs/vote` | Vota numa música `{"song_id": 1}` (pode trocar) |
-| GET | `/halls/{salão}/track` | Música que o salão toca: a vencedora da semana passada |
-| GET 🔒 | `/admin/capsules?status=hidden` | Admin: lâmpadas ocultas (ou `reported`, denunciadas e ainda visíveis) |
-| POST 🔒 | `/admin/capsules/{id}/approve` | Admin: libera a lâmpada e zera as denúncias |
-| DELETE 🔒 | `/admin/capsules/{id}` | Admin: apaga a lâmpada |
+## Situação atual
 
-Os salões são `asiatico`, `medieval`, `cyberpunk`, `espaco` e `estacoes`.
+A primeira versão do Democrápsulas já funciona, com:
 
-Antes da data de abertura, `title`, `content` e `author` vêm como `null` para todo mundo, menos para quem criou. O campo `is_open` diz se a lâmpada já pode ser lida.
+* Contas com JWT
+* Lâmpadas que só abrem na data marcada
+* Votos, favoritos, denúncias e moderação
+* Roleta, ranking e dados do site
+* Votação semanal de músicas
+* PostgreSQL com migrations
+* Docker
+* Testes automáticos
+* Tela de entrada, Salão Asiático, Criar Lâmpada e Roleta
 
-A semana da votação de músicas vai de segunda 00:00 a domingo 23:59, no horário de Brasília. As músicas cadastradas por enquanto são provisórias ("Faixa 1", "Faixa 2" e "Faixa 3" em cada salão, com arquivos em `audio/<salão>/faixa-N.mp3`).
+### Limitações
 
-As palavras bloqueadas ficam em `backend/app/core/bad_words.txt`, uma por linha. Os limites podem ser mudados no `.env` (veja o `.env.example`).
+* Só o Salão Asiático tem visual pronto; os outros mostram "Em breve".
+* Galeria, Ranking, Votação de Músicas e Minha Conta ainda não têm página.
+* O site ainda não permite criar lâmpadas privadas, embora a API já aceite.
+* As músicas são provisórias e os arquivos de áudio ainda não foram escolhidos.
 
-Depois de mudar um model, gere uma migration nova e aplique:
+### Próximos passos
 
-```bash
-alembic revision --autogenerate -m "descrição da mudança"
-alembic upgrade head
-```
+* Páginas de Galeria, Ranking, Votação e Minha Conta
+* Votos, favoritos e denúncias nas lâmpadas abertas
+* Visual dos salões Medieval, Cyberpunk, Espaço e Estações
+* Músicas definitivas
+* Testes e ajustes finais
 
-Rode os comandos do Alembic sempre de dentro de `backend`, porque é de lá que a API lê o `.env`.
+---
 
 ## Quem faz
 
@@ -183,14 +401,14 @@ Felipe Barbosa Santos cuida do servidor (API e banco de dados) e também ajuda n
 
 Gabriel Fernandes Barbarini cuida do front-end: [github.com/FeLaLost](https://github.com/FeLaLost)
 
-É um trabalho da disciplina de Programação Web, do curso técnico em Desenvolvimento de Sistemas (turma 1C2) da ETEC Vasco Antonio Venchiarutti, em Jundiaí. Professora: Daniela.
+Trabalho da disciplina de Programação Web, do curso técnico em Desenvolvimento de Sistemas (turma 1C2) da ETEC Vasco Antonio Venchiarutti, em Jundiaí. Professora: Daniela.
 
 ## Sites que nos inspiraram
 
-- [neal.fun](https://neal.fun), pela criatividade dos experimentos interativos
-- [FutureMe](https://www.futureme.org), onde se escrevem cartas para o futuro
-- [Museum of Endangered Sounds](https://savethesounds.info), um painel de sons antigos de tecnologia
-- [Radiooooo](https://radiooooo.com), onde se ouve música escolhendo país e década
+* [neal.fun](https://neal.fun), pela criatividade dos experimentos interativos
+* [FutureMe](https://www.futureme.org), onde se escrevem cartas para o futuro
+* [Museum of Endangered Sounds](https://savethesounds.info), um painel de sons antigos de tecnologia
+* [Radiooooo](https://radiooooo.com), onde se ouve música escolhendo país e década
 
 ## Créditos
 
