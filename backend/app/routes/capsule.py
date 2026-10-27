@@ -14,7 +14,7 @@ from app.core.profanity import contains_bad_words
 from app.core.security import get_current_user, get_optional_user
 from app.schemas.capsule import SchemaCapsuleCreate, SchemaCapsuleResponse, SchemaVote, SchemaReport
 from app.services.capsule import (
-    serialize_capsule, serialize_capsules, get_capsule_or_404, get_visible_capsule, find_user_row, require_open,
+    PUBLIC, serialize_capsule, serialize_capsules, get_capsule_or_404, get_visible_capsule, find_user_row, require_open,
 )
 
 router = APIRouter(prefix="/capsules", tags=["capsules"])
@@ -54,7 +54,7 @@ def create_capsule(capsule: SchemaCapsuleCreate, db: Session = Depends(get_db), 
 def list_hall_capsules(hall: Hall, db: Session = Depends(get_db), c_user=Depends(get_optional_user)):
     query = (
         select(Capsule)
-        .where(Capsule.hall == hall, Capsule.is_private == False, Capsule.is_hidden == False)
+        .where(Capsule.hall == hall, *PUBLIC)
         .order_by(func.random())
         .limit(settings.HALL_CAPSULE_LIMIT)
     )
@@ -66,7 +66,7 @@ def list_hall_capsules(hall: Hall, db: Session = Depends(get_db), c_user=Depends
 def random_capsule(hall: Hall | None = None, db: Session = Depends(get_db), c_user=Depends(get_optional_user)):
     query = (
         select(Capsule)
-        .where(Capsule.is_private == False, Capsule.is_hidden == False, Capsule.open_at <= now_utc())
+        .where(*PUBLIC, Capsule.open_at <= now_utc())
         .order_by(func.random())
         .limit(1)
     )

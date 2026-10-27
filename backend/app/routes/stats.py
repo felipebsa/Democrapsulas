@@ -11,7 +11,7 @@ from app.core.security import get_optional_user
 from app.schemas.capsule import SchemaCapsuleResponse
 from app.schemas.stats import SchemaStats
 from app.core.clock import now_utc
-from app.services.capsule import serialize_capsules
+from app.services.capsule import PUBLIC, serialize_capsules
 
 router = APIRouter(tags=["stats"])
 
@@ -30,12 +30,7 @@ def ranking(
     query = (
         select(Capsule)
         .join(scores, scores.c.capsule_id == Capsule.id)
-        .where(
-            Capsule.is_private == False,
-            Capsule.is_hidden == False,
-            Capsule.open_at <= now_utc(),
-            scores.c.score > 0,
-        )
+        .where(*PUBLIC, Capsule.open_at <= now_utc(), scores.c.score > 0)
         .order_by(scores.c.score.desc(), Capsule.open_at.asc())
         .limit(limit)
     )
@@ -49,9 +44,8 @@ def ranking(
 def stats(db: Session = Depends(get_db)):
     now = now_utc()
     capsule_count = select(func.count()).select_from(Capsule)
-    public = (Capsule.is_private == False, Capsule.is_hidden == False)
 
-    per_hall_query = select(Capsule.hall, func.count()).where(*public).group_by(Capsule.hall)
+    per_hall_query = select(Capsule.hall, func.count()).where(*PUBLIC).group_by(Capsule.hall)
     per_hall = {hall: 0 for hall in HALLS}
     per_hall.update(dict(db.execute(per_hall_query).all()))
 

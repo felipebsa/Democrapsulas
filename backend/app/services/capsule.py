@@ -8,6 +8,8 @@ from app.models.vote import Vote
 from app.models.favorite import Favorite
 from app.schemas.capsule import SchemaCapsuleResponse
 
+#filter for capsules anyone can see: not private and not hidden by reports
+PUBLIC = (Capsule.is_private == False, Capsule.is_hidden == False)
 
 def serialize_capsules(db: Session, capsules: list[Capsule], user: User | None) -> list[SchemaCapsuleResponse]:
     now = now_utc()
