@@ -914,12 +914,21 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   .entrada__dica { display: none; }
 }
 
+/* celular: lâmpadas menores pra caber 3 colunas sem encostar */
+@media (max-width: 700px) {
+  .lampada {
+    left: clamp(48px, var(--x), calc(100% - 48px));
+    width: 96px;
+    margin-left: -48px;
+  }
+  .lampada__img { width: 68px; filter: drop-shadow(0 0 12px var(--lanterna-brilho)) var(--lanterna-tom); }
+  .lampada__tempo { margin-top: 4px; font-size: 20px; }
+}
+
 @media (max-width: 420px) {
   .btn-entrar { padding: 8px 12px; font-size: 13px; }
   .usuario { max-width: 120px; }
   .icone { width: 34px; }
-  .lampada__img { width: 92px; }
-  .lampada__tempo { font-size: 26px; }
   .btn-iniciar { font-size: 18px; padding: 14px 36px 14px 42px; }
 }
 
