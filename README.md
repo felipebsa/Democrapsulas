@@ -167,12 +167,13 @@ Os salões são `asiatico`, `medieval`, `cyberpunk`, `espaco` e `estacoes`.
   "hall": "asiatico",
   "title": "Para mim daqui a um ano",
   "content": "...",
+  "lantern": 7,
   "is_private": false,
   "open_at": "2027-01-01T00:00:00-03:00"
 }
 ```
 
-A data de abertura precisa ter fuso. Antes dela, `title`, `content` e `author` vêm como `null` para todo mundo, menos para quem criou. O campo `is_open` diz se a lâmpada já pode ser lida.
+`lantern` é o modelo da lanterna, de 1 a 17 (as imagens ficam em `frontend/img/lanterns/`). A data de abertura precisa ter fuso. Antes dela, `title`, `content` e `author` vêm como `null` para todo mundo, menos para quem criou. O campo `is_open` diz se a lâmpada já pode ser lida.
 
 ### Votação de músicas
 
