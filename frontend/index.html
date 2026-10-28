@@ -273,6 +273,20 @@
     </div>
   </main>
 
+  <!-- ================= RANKING ================= -->
+  <main class="pagina pagina--rolavel" id="pagina-ranking" hidden>
+    <div class="ranking">
+      <header class="pagina__cabeca pagina__cabeca--centro">
+        <p class="salao__tag">Ranking</p>
+        <h1 class="pagina__titulo">As mais votadas</h1>
+        <p class="pagina__texto" id="ranking-info">carregando…</p>
+      </header>
+
+      <div class="podio" id="ranking-podio"></div>
+      <ol class="card ranking__lista" id="ranking-lista" hidden></ol>
+    </div>
+  </main>
+
   <!-- salões que ainda não existem e as outras páginas usam esse card -->
   <main class="pagina pagina--centro" id="pagina-embreve" hidden>
     <div class="card card--embreve">
@@ -395,6 +409,7 @@
   <script src="js/salao.js"></script>
   <script src="js/criar.js"></script>
   <script src="js/roleta.js"></script>
+  <script src="js/ranking.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

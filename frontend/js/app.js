@@ -63,7 +63,7 @@ function iniciarEntrada() {
 
 // ---------- rotas ----------
 function mostrar(id) {
-  ["tela-entrada", "pagina-salao", "pagina-criar", "pagina-roleta", "pagina-embreve"].forEach((p) => {
+  ["tela-entrada", "pagina-salao", "pagina-criar", "pagina-roleta", "pagina-ranking", "pagina-embreve"].forEach((p) => {
     document.getElementById(p).hidden = p !== id;
   });
   document.getElementById("navbar").hidden = id === "tela-entrada";
@@ -131,6 +131,7 @@ function rotear() {
 
   if (rota === "criar") { mostrar("pagina-criar"); abrirCriar(); return; }
   if (rota === "roleta") { mostrar("pagina-roleta"); abrirRoleta(); return; }
+  if (rota === "ranking") { mostrar("pagina-ranking"); abrirRanking(); return; }
   mostrarEmBreve(titulo);
 }
 
@@ -143,5 +144,6 @@ iniciarSalao();
 iniciarAcoes();
 iniciarCriar();
 iniciarRoleta();
+iniciarRanking();
 window.addEventListener("hashchange", rotear);
 rotear();

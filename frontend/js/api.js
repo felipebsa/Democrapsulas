@@ -87,4 +87,7 @@ const api = {
   tirarVoto: (id) => requisicao("/capsules/" + id + "/vote", { method: "DELETE" }),
 
   denunciar: (id) => requisicao("/capsules/" + id + "/report", { method: "POST", body: {} }),
+
+  // só lâmpadas abertas com score positivo, da mais votada pra menos
+  ranking: (limite = 20) => requisicao("/ranking?limit=" + limite),
 };
