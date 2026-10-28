@@ -15,9 +15,11 @@
 
   <!-- aplica o tema antes de desenhar a página, pra não piscar; começa no claro -->
   <script>
-    var escolhido = null;
-    try { escolhido = localStorage.getItem("tema-escolhido"); } catch (e) {}
-    if (escolhido !== "escuro") document.documentElement.classList.add("claro");
+    try {
+      if (localStorage.getItem("tema-escolhido") !== "escuro") document.documentElement.classList.add("claro");
+    } catch (e) {
+      document.documentElement.classList.add("claro");
+    }
   </script>
 </head>
 <body>
@@ -103,11 +105,11 @@
 
   <!-- barra de baixo do celular, tipo app; galeria e votação ficam apagadas -->
   <nav class="barra" id="barra" aria-label="Navegação do celular" hidden>
-    <span class="barra__item barra__item--off" aria-disabled="true" aria-label="Galeria (em breve)"><svg class="ic"><use href="#i-estrela"/></svg></span>
+    <span class="barra__item barra__item--off" role="link" aria-disabled="true" aria-label="Galeria (em breve)"><svg class="ic"><use href="#i-estrela"/></svg></span>
     <a class="barra__item" data-rota="roleta" href="#/roleta" aria-label="Roleta"><svg class="ic"><use href="#i-roleta"/></svg></a>
     <a class="barra__item barra__item--mais" data-rota="criar" href="#/criar" aria-label="Criar Lâmpada"><svg class="ic"><use href="#i-mais"/></svg></a>
     <a class="barra__item" data-rota="ranking" href="#/ranking" aria-label="Ranking"><svg class="ic"><use href="#i-trofeu"/></svg></a>
-    <span class="barra__item barra__item--off" aria-disabled="true" aria-label="Votação (em breve)"><svg class="ic"><use href="#i-musica"/></svg></span>
+    <span class="barra__item barra__item--off" role="link" aria-disabled="true" aria-label="Votação (em breve)"><svg class="ic"><use href="#i-musica"/></svg></span>
   </nav>
 
   <!-- ================= PÁGINAS ================= -->

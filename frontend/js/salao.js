@@ -56,7 +56,6 @@ function desenharLampadas(lista) {
   const colunas = celular ? 3 : 6;
   const escolhidas = embaralhar(lista).slice(0, MAX_LAMPADAS_NA_TELA);
   // no celular a coluna é estreita: cada coluna sobe numa velocidade só, senão uma alcança a outra
-  const porColuna = Math.ceil(escolhidas.length / colunas);
   const durDaColuna = Array.from({ length: colunas }, () => sortear(55, 80));
 
   escolhidas.forEach((lampada, i) => {
@@ -66,8 +65,9 @@ function desenharLampadas(lista) {
     const folga = celular ? largura / 8 : largura / 4;
     const x = largura * coluna + largura / 2 + sortear(-folga, folga);
     const dur = celular ? durDaColuna[coluna] : sortear(55, 80);
+    const naColuna = Math.ceil((escolhidas.length - coluna) / colunas);
     const atraso = celular
-      ? -(((Math.floor(i / colunas) + coluna / colunas) / porColuna) * dur + sortear(0, 1.5))
+      ? -(((Math.floor(i / colunas) + coluna / colunas) / naColuna) * dur + sortear(0, 1.5))
       : -((i / escolhidas.length) * dur + sortear(0, 6));
     const longe = Math.random() < 0.35;
 

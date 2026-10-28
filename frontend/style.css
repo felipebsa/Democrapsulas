@@ -355,8 +355,9 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .pilula.ativa { color: var(--branco); background: rgba(255, 122, 0, .14); }
 .pilula.ativa .ic { color: var(--laranja); }
 
-/* sublinhado laranja do link ativo */
-.pilula.ativa::after {
+/* sublinhado laranja do link ativo (a barra do celular usa o mesmo) */
+.pilula.ativa::after,
+.barra__item.ativa::after {
   content: "";
   position: absolute;
   left: 22%;
@@ -475,15 +476,13 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   display: none;
   justify-content: space-around;
   align-items: center;
-  height: calc(var(--barra-altura) + env(safe-area-inset-bottom));
+  height: var(--barra-altura);
   padding-bottom: env(safe-area-inset-bottom);
   background: color-mix(in srgb, var(--card) 80%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid color-mix(in srgb, var(--borda) 80%, transparent);
 }
-
-.barra[hidden] { display: none !important; }
 
 .barra__item {
   position: relative;
@@ -498,17 +497,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 
 .barra__item .ic { width: 24px; height: 24px; }
 .barra__item.ativa { color: var(--laranja); }
-
-.barra__item.ativa::after {
-  content: "";
-  position: absolute;
-  left: 30%;
-  right: 30%;
-  bottom: 2px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--laranja);
-}
+.barra__item.ativa::after { left: 30%; right: 30%; bottom: 2px; }
 
 /* o + é o botão principal, laranja e redondo */
 .barra__item--mais {
@@ -921,7 +910,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 }
 
 @media (max-width: 900px) {
-  :root { --barra-altura: 64px; }
+  :root { --barra-altura: calc(64px + env(safe-area-inset-bottom)); }
 
   .nav { padding: 0 14px; gap: 10px; }
   .nav__links { display: none; }
@@ -1190,7 +1179,7 @@ select.campo option { background: var(--card); color: var(--texto); }
 
 .criar__abre { font-size: 13px; color: var(--texto); min-height: 20px; }
 
-.criar__pronto { min-height: calc(100dvh - var(--nav-altura) - 92px); padding: 0; }
+.criar__pronto { min-height: calc(100dvh - var(--nav-altura) - var(--barra-altura) - 92px); padding: 0; }
 
 @keyframes flutuar {
   50% { transform: translateY(-10px); }
