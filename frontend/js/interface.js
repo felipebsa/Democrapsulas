@@ -70,7 +70,7 @@ async function tocarMusicaDoSalao(salao) {
   }
 }
 
-// ---------- dropdowns e menu do celular ----------
+// ---------- dropdowns ----------
 function fecharDropdowns(menos) {
   document.querySelectorAll(".dropdown.aberto").forEach((d) => {
     if (d === menos) return;
@@ -90,14 +90,6 @@ function ligarDropdown(idDropdown, idBotao) {
     dropdown.classList.toggle("aberto", abrir);
     botao.setAttribute("aria-expanded", String(abrir));
   });
-}
-
-function definirMenuCelular(aberto) {
-  document.getElementById("navbar").classList.toggle("aberta", aberto);
-  const btn = document.getElementById("btn-menu");
-  btn.setAttribute("aria-expanded", String(aberto));
-  btn.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
-  btn.querySelector("use").setAttribute("href", aberto ? "#i-x" : "#i-menu");
 }
 
 // ---------- usuário logado ----------
@@ -236,11 +228,6 @@ function iniciarInterface() {
   ligarDropdown("menu-usuario", "btn-usuario");
   document.addEventListener("click", () => fecharDropdowns());
 
-  document.getElementById("btn-menu").addEventListener("click", () => {
-    definirMenuCelular(!document.getElementById("navbar").classList.contains("aberta"));
-  });
-  window.matchMedia("(min-width: 901px)").addEventListener("change", () => definirMenuCelular(false));
-
   // login
   document.getElementById("btn-entrar").addEventListener("click", () => abrirLogin());
   document.getElementById("btn-sair").addEventListener("click", sair);
@@ -271,7 +258,7 @@ function iniciarInterface() {
     if (!modalDenuncia.hidden) fecharDenuncia();
     else if (!modalAuth.hidden) fecharModal("modal-auth");
     else if (!modalLer.hidden) fecharModal("modal-ler");
-    else { fecharDropdowns(); definirMenuCelular(false); }
+    else fecharDropdowns();
   });
 
   carregarUsuario();

@@ -67,13 +67,14 @@ function mostrar(id) {
     document.getElementById(p).hidden = p !== id;
   });
   document.getElementById("navbar").hidden = id === "tela-entrada";
+  document.getElementById("barra").hidden = id === "tela-entrada";
 }
 
 function marcarLinkAtivo(rota, salao) {
-  document.querySelectorAll(".nav__links .pilula").forEach((link) => {
+  document.querySelectorAll(".nav__links .pilula, .barra a").forEach((link) => {
     link.classList.toggle("ativa", link.dataset.rota === rota);
   });
-  document.querySelectorAll(".dropdown__menu a, .nav__painel a").forEach((link) => {
+  document.querySelectorAll(".dropdown__menu a").forEach((link) => {
     const destino = link.getAttribute("href");
     const ativa = destino === "#/" + rota + (salao ? "/" + salao : "");
     link.classList.toggle("ativa", ativa);
@@ -92,7 +93,6 @@ function rotear() {
   const rota = partes[0] || "";
 
   fecharDropdowns();
-  definirMenuCelular(false);
   definirInfo(false);
   window.scrollTo(0, 0);
 

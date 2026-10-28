@@ -86,10 +86,6 @@
       <button class="icone" id="btn-tema" aria-label="Mudar pro modo claro">
         <svg class="ic"><use href="#i-sol"/></svg>
       </button>
-      <button class="icone nav__hamburguer" id="btn-menu" aria-label="Abrir menu" aria-expanded="false">
-        <svg class="ic"><use href="#i-menu"/></svg>
-      </button>
-
       <button class="btn-entrar" id="btn-entrar">Entrar</button>
 
       <div class="dropdown dropdown--direita" id="menu-usuario" hidden>
@@ -103,26 +99,16 @@
       </div>
     </div>
 
-    <!-- painel do celular -->
-    <nav class="nav__painel" id="painel-menu" aria-label="Navegação móvel">
-      <p class="nav__painel-titulo">Salões</p>
-      <div class="nav__painel-grade">
-        <a href="#/salao/asiatico">Asiático</a>
-        <a href="#/salao/medieval">Medieval</a>
-        <a href="#/salao/cyberpunk">Cyberpunk</a>
-        <a href="#/salao/espaco">Espaço</a>
-        <a href="#/salao/estacoes">Estações</a>
-      </div>
-      <p class="nav__painel-titulo">Páginas</p>
-      <div class="nav__painel-grade">
-        <a href="#/criar">Criar Lâmpada</a>
-        <a href="#/roleta">Roleta</a>
-        <a href="#/galeria">Galeria</a>
-        <a href="#/ranking">Ranking</a>
-        <a href="#/votacao">Votação</a>
-      </div>
-    </nav>
   </header>
+
+  <!-- barra de baixo do celular, tipo app; galeria e votação ficam apagadas -->
+  <nav class="barra" id="barra" aria-label="Navegação do celular" hidden>
+    <span class="barra__item barra__item--off" aria-disabled="true" aria-label="Galeria (em breve)"><svg class="ic"><use href="#i-estrela"/></svg></span>
+    <a class="barra__item" data-rota="roleta" href="#/roleta" aria-label="Roleta"><svg class="ic"><use href="#i-roleta"/></svg></a>
+    <a class="barra__item barra__item--mais" data-rota="criar" href="#/criar" aria-label="Criar Lâmpada"><svg class="ic"><use href="#i-mais"/></svg></a>
+    <a class="barra__item" data-rota="ranking" href="#/ranking" aria-label="Ranking"><svg class="ic"><use href="#i-trofeu"/></svg></a>
+    <span class="barra__item barra__item--off" aria-disabled="true" aria-label="Votação (em breve)"><svg class="ic"><use href="#i-musica"/></svg></span>
+  </nav>
 
   <!-- ================= PÁGINAS ================= -->
   <main class="pagina" id="pagina-salao" hidden>
@@ -381,7 +367,6 @@
       <symbol id="i-mudo" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="m22 9-6 6M16 9l6 6"/></symbol>
       <symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
       <symbol id="i-lua" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
-      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
       <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
       <symbol id="i-seta" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
       <!-- seta dos votos: corpo preenchido, contorno e um brilho que acende no voto escolhido (a de baixo é ela girada) -->
