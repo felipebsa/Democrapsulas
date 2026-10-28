@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import Literal
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
-from app.core.constants import Hall, TITLE_MAX_LENGTH, CONTENT_MAX_LENGTH
+from app.core.constants import Hall, TITLE_MAX_LENGTH, CONTENT_MAX_LENGTH, LANTERN_COUNT
 
 class SchemaCapsuleCreate(BaseModel):
     hall: Hall
     title: str = Field(min_length=1, max_length=TITLE_MAX_LENGTH)
     content: str = Field(min_length=1, max_length=CONTENT_MAX_LENGTH)
+    lantern: int = Field(ge=1, le=LANTERN_COUNT)
     is_private: bool = False
     open_at: AwareDatetime
 
@@ -17,6 +18,7 @@ class SchemaCapsuleCreate(BaseModel):
 class SchemaCapsuleResponse(BaseModel):
     id: int
     hall: str
+    lantern: int
     is_private: bool
     is_open: bool
     is_mine: bool

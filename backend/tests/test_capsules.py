@@ -5,11 +5,12 @@ from tests.conftest import future
 
 def test_create_capsule(client, make_user):
     headers = make_user()
-    body = {"hall": "medieval", "title": "Oi", "content": "Mensagem", "open_at": future()}
+    body = {"hall": "medieval", "title": "Oi", "lantern": 3, "content": "Mensagem", "open_at": future()}
     response = client.post("/capsules", json=body, headers=headers)
     assert response.status_code == 201
     data = response.json()
     assert data["hall"] == "medieval"
+    assert data["lantern"] == 3
     assert data["is_mine"] is True
     assert data["is_open"] is False
     #the owner can read their own capsule
@@ -17,13 +18,13 @@ def test_create_capsule(client, make_user):
 
 
 def test_create_capsule_needs_login(client):
-    body = {"hall": "medieval", "title": "Oi", "content": "Mensagem", "open_at": future()}
+    body = {"hall": "medieval", "title": "Oi", "lantern": 3, "content": "Mensagem", "open_at": future()}
     assert client.post("/capsules", json=body).status_code == 401
 
 
 def test_create_capsule_validation(client, make_user):
     headers = make_user()
-    base = {"hall": "medieval", "title": "Oi", "content": "Mensagem", "open_at": future()}
+    base = {"hall": "medieval", "title": "Oi", "lantern": 3, "content": "Mensagem", "open_at": future()}
     past = (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat()
 
     assert client.post("/capsules", json={**base, "hall": "praia"}, headers=headers).status_code == 422
@@ -31,11 +32,13 @@ def test_create_capsule_validation(client, make_user):
     assert client.post("/capsules", json={**base, "open_at": "2030-01-01T00:00:00"}, headers=headers).status_code == 422
     assert client.post("/capsules", json={**base, "content": "x" * 1001}, headers=headers).status_code == 422
     assert client.post("/capsules", json={**base, "title": "   "}, headers=headers).status_code == 422
+    assert client.post("/capsules", json={**base, "lantern": 0}, headers=headers).status_code == 422
+    assert client.post("/capsules", json={**base, "lantern": 18}, headers=headers).status_code == 422
 
 
 def test_create_capsule_bad_words(client, make_user):
     headers = make_user()
-    body = {"hall": "medieval", "title": "Oi", "content": "que M3RRRDA", "open_at": future()}
+    body = {"hall": "medieval", "title": "Oi", "lantern": 3, "content": "que M3RRRDA", "open_at": future()}
     assert client.post("/capsules", json=body, headers=headers).status_code == 422
 
 
@@ -43,7 +46,7 @@ def test_cooldown(client, make_user, make_capsule, monkeypatch):
     monkeypatch.setattr(settings, "CAPSULE_COOLDOWN_SECONDS", 60)
     headers = make_user()
     make_capsule(headers)
-    body = {"hall": "medieval", "title": "Oi", "content": "Mensagem", "open_at": future()}
+    body = {"hall": "medieval", "title": "Oi", "lantern": 3, "content": "Mensagem", "open_at": future()}
     response = client.post("/capsules", json=body, headers=headers)
     assert response.status_code == 429
 
@@ -53,7 +56,7 @@ def test_daily_limit(client, make_user, make_capsule, monkeypatch):
     headers = make_user()
     make_capsule(headers)
     make_capsule(headers)
-    body = {"hall": "medieval", "title": "Oi", "content": "Mensagem", "open_at": future()}
+    body = {"hall": "medieval", "title": "Oi", "lantern": 3, "content": "Mensagem", "open_at": future()}
     assert client.post("/capsules", json=body, headers=headers).status_code == 429
 
 

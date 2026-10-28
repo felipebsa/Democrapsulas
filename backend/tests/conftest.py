@@ -88,7 +88,7 @@ def future(days: int = 1) -> str:
 @pytest.fixture
 def make_capsule(client):
     def make(headers: dict, hall: str = "asiatico", title: str = "titulo", content: str = "mensagem", is_private: bool = False) -> int:
-        body = {"hall": hall, "title": title, "content": content, "is_private": is_private, "open_at": future()}
+        body = {"hall": hall, "title": title, "content": content, "lantern": 1, "is_private": is_private, "open_at": future()}
         response = client.post("/capsules", json=body, headers=headers)
         assert response.status_code == 201, response.text
         return response.json()["id"]

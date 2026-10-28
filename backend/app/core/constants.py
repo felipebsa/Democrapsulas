@@ -7,6 +7,9 @@ HALLS = get_args(Hall)
 SEASONS = ("primavera", "verao", "outono", "inverno")
 SEASON_SECONDS = 120
 
+#lantern skins, numbered 1..LANTERN_COUNT like the images in frontend/img/lanterns
+LANTERN_COUNT = 17
+
 #column sizes, shared by models and schemas
 HALL_MAX_LENGTH = 20
 USERNAME_MAX_LENGTH = 20

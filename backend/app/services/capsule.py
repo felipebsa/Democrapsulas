@@ -34,6 +34,7 @@ def serialize_capsules(db: Session, capsules: list[Capsule], user: User | None) 
         result.append(SchemaCapsuleResponse(
             id=capsule.id,
             hall=capsule.hall,
+            lantern=capsule.lantern,
             is_private=capsule.is_private,
             is_open=is_open,
             is_mine=is_mine,

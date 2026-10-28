@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import func, String, ForeignKey, DateTime
+from sqlalchemy import func, String, ForeignKey, DateTime, SmallInteger
 from app.database import Base
 from app.models.user import User
 from app.core.constants import HALL_MAX_LENGTH, TITLE_MAX_LENGTH, CONTENT_MAX_LENGTH
@@ -13,6 +13,7 @@ class Capsule(Base):
     hall: Mapped[str] = mapped_column(String(HALL_MAX_LENGTH), index=True)
     title: Mapped[str] = mapped_column(String(TITLE_MAX_LENGTH))
     content: Mapped[str] = mapped_column(String(CONTENT_MAX_LENGTH))
+    lantern: Mapped[int] = mapped_column(SmallInteger)
     is_private: Mapped[bool] = mapped_column(default=False)
     is_hidden: Mapped[bool] = mapped_column(default=False)
     open_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
