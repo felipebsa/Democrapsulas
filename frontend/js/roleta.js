@@ -15,8 +15,7 @@ function montarFaixa() {
     const celula = document.createElement("div");
     celula.className = "roleta__celula";
     const img = document.createElement("img");
-    img.className = "lanterna-tema";
-    img.src = imagemLanterna();
+    img.src = imagemLanterna(lanternaAleatoria());
     img.alt = "";
     // tamanhos levemente diferentes pra não parecer carimbo
     img.style.setProperty("--escala", (0.82 + Math.random() * 0.22).toFixed(2));
@@ -91,6 +90,10 @@ async function girar() {
   void faixa.offsetWidth;
 
   const pedido = buscarSorteio();  // já pede enquanto gira
+  // a célula onde a faixa para vira a lanterna da sorteada, bem antes de aparecer na janela
+  pedido.then((lampada) => {
+    if (typeof lampada === "object") faixa.children[ALVO].firstChild.src = imagemLanterna(lampada.lantern);
+  });
 
   const sobra = (Math.random() - 0.5) * LARGURA_CELULA * 0.5;  // para um pouquinho fora do centro, mais natural
   const tempo = reduzirMovimento.matches ? 0 : DURACAO_GIRO;

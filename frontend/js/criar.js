@@ -2,6 +2,7 @@
 
 const criar = {
   abreEm: 0,             // horário (ms) em que a lâmpada vai abrir
+  lanterna: lanternaAleatoria(),
   esperandoLogin: false, // clicou em soltar sem estar logado
   enviando: false,
 };
@@ -21,6 +22,13 @@ function atualizarPrevia() {
   const falta = criar.abreEm - Date.now();
   document.getElementById("criar-tempo").textContent = formatarTempo(falta);
   document.getElementById("criar-abre").textContent = falta > 0 ? textoQuandoAbre(criar.abreEm) : "escolhe daqui quanto tempo ela abre";
+}
+
+// setinhas da prévia: anda pelas lanternas e dá a volta nas pontas
+function trocarLanterna(passo) {
+  criar.lanterna = (criar.lanterna - 1 + passo + LANTERNAS.length) % LANTERNAS.length + 1;
+  document.getElementById("criar-lanterna").src = imagemLanterna(criar.lanterna);
+  document.getElementById("criar-lanterna-num").textContent = criar.lanterna + " / " + LANTERNAS.length;
 }
 
 // junta dias + horas + minutos (sem limite máximo) e calcula quando abre a partir de agora
@@ -109,6 +117,7 @@ async function enviarLampada(e) {
       hall: salao,
       title: titulo,
       content: texto,
+      lantern: criar.lanterna,
       is_private: false,  // lâmpada privada ainda está em breve
       open_at: new Date(criar.abreEm).toISOString(),
     });
@@ -135,6 +144,7 @@ function lampadaCriada() {
   salaoCarregado = null;  // força o salão a buscar de novo e mostrar a nova
 
   document.getElementById("criar-lampada").classList.add("solta");
+  document.getElementById("pronto-lanterna").src = imagemLanterna(criar.lanterna);
 
   setTimeout(() => {
     document.getElementById("pronto-texto").textContent =
@@ -167,7 +177,10 @@ function iniciarCriar() {
 
   carregarRascunho();
   lerTempo();
+  trocarLanterna(0);
 
+  document.getElementById("lanterna-anterior").addEventListener("click", () => trocarLanterna(-1));
+  document.getElementById("lanterna-proxima").addEventListener("click", () => trocarLanterna(1));
   campoTitulo.addEventListener("input", () => { atualizarContagem(campoTitulo, "conta-titulo"); salvarRascunho(); });
   campoTexto.addEventListener("input", () => { atualizarContagem(campoTexto, "conta-texto"); salvarRascunho(); });
   document.querySelectorAll("#tempo-livre input").forEach((campo) => campo.addEventListener("input", lerTempo));

@@ -1116,7 +1116,9 @@ select.campo option { background: var(--card); color: var(--texto); }
 .criar__palco {
   height: 260px;
   display: grid;
+  grid-template-columns: auto 1fr auto;
   place-items: center;
+  padding: 0 22px;
   margin: 6px -18px 0;
   background: radial-gradient(closest-side, rgba(255, 122, 0, .12), transparent);
 }
@@ -1133,6 +1135,17 @@ select.campo option { background: var(--card); color: var(--texto); }
 
 /* depois de enviar ela sobe e some */
 .criar__lampada.solta { animation: soltar 1.1s cubic-bezier(.5, 0, .75, .3) forwards; }
+
+/* setinhas de escolher a lanterna; o ícone é o chevron pra baixo, girado */
+.criar__seta--anterior .ic { transform: rotate(90deg); }
+.criar__seta--proxima .ic { transform: rotate(-90deg); }
+
+.criar__lanterna-num {
+  font-family: var(--fonte-tempo);
+  font-size: 18px;
+  color: var(--texto-cinza);
+  font-variant-numeric: tabular-nums;
+}
 
 .criar__abre { font-size: 13px; color: var(--texto); min-height: 20px; }
 

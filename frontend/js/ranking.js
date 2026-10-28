@@ -22,8 +22,8 @@ function montarLugar(lampada, posicao) {
   lugar.setAttribute("aria-label", posicao + "º lugar: " + (lampada.title || "Sem título") + ", " + textoVotos(lampada.score));
 
   const lanterna = criarEl("span", "podio__lanterna");
-  const img = criarEl("img", "lanterna-tema");
-  img.src = imagemLanterna();
+  const img = criarEl("img");
+  img.src = imagemLanterna(lampada.lantern);
   img.alt = "";
   lanterna.append(img, criarEl("span", "podio__titulo", lampada.title || "Sem título"));
 

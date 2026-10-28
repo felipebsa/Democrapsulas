@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Democrápsulas</title>
   <meta name="description" content="Escreva uma mensagem pro futuro e guarde numa lâmpada.">
-  <link rel="icon" href="img/lanterna-asiatica.png">
+  <link rel="icon" href="img/lanterns/15-dark-red.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -221,11 +221,18 @@
         <aside class="card criar__previa" aria-label="Prévia da lâmpada">
           <p class="criar__previa-tag">Prévia</p>
           <div class="criar__palco" id="criar-palco">
+            <button class="icone criar__seta criar__seta--anterior" type="button" id="lanterna-anterior" aria-label="Lanterna anterior">
+              <svg class="ic"><use href="#i-seta"/></svg>
+            </button>
             <div class="criar__lampada" id="criar-lampada">
-              <img class="lampada__img lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+              <img class="lampada__img" id="criar-lanterna" alt="">
               <span class="lampada__tempo" id="criar-tempo">1d 00h</span>
             </div>
+            <button class="icone criar__seta criar__seta--proxima" type="button" id="lanterna-proxima" aria-label="Próxima lanterna">
+              <svg class="ic"><use href="#i-seta"/></svg>
+            </button>
           </div>
+          <p class="criar__lanterna-num" id="criar-lanterna-num" aria-live="polite"></p>
           <p class="criar__abre" id="criar-abre">abre amanhã</p>
         </aside>
       </div>
@@ -234,7 +241,7 @@
     <!-- depois de criar -->
     <div class="pagina--centro criar__pronto" id="criar-pronto" hidden>
       <div class="card card--embreve">
-        <img class="card__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+        <img class="card__lanterna" id="pronto-lanterna" alt="">
         <p class="card__tag">Lâmpada solta</p>
         <h2 class="card__titulo">Ela tá subindo</h2>
         <p class="card__texto" id="pronto-texto"></p>
@@ -290,7 +297,7 @@
   <!-- salões que ainda não existem e as outras páginas usam esse card -->
   <main class="pagina pagina--centro" id="pagina-embreve" hidden>
     <div class="card card--embreve">
-      <img class="card__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+      <img class="card__lanterna" src="img/lanterns/15-dark-red.png" alt="">
       <p class="card__tag" id="embreve-tag">Roleta</p>
       <h1 class="card__titulo">Em breve</h1>
       <p class="card__texto">Essa parte chega nas próximas etapas.</p>
@@ -303,7 +310,7 @@
       <button class="modal__fechar icone" id="auth-fechar" aria-label="Fechar">
         <svg class="ic"><use href="#i-x"/></svg>
       </button>
-      <img class="modal__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+      <img class="modal__lanterna" src="img/lanterns/15-dark-red.png" alt="">
       <h2 id="auth-titulo">Bem-vindo de volta</h2>
       <p class="modal__sub" id="auth-sub">Entre pra guardar suas mensagens nas lâmpadas.</p>
 
@@ -333,7 +340,7 @@
       <button class="modal__fechar icone" data-fechar aria-label="Fechar">
         <svg class="ic"><use href="#i-x"/></svg>
       </button>
-      <img class="modal__lanterna lanterna-tema" src="img/lanterna-asiatica.png" alt="">
+      <img class="modal__lanterna" id="ler-lanterna" alt="">
       <h2 id="ler-titulo"></h2>
       <p class="modal__sub" id="ler-info"></p>
       <p class="ler__texto" id="ler-texto"></p>

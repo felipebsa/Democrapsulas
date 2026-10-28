@@ -80,7 +80,7 @@ function desenharLampadas(lista) {
 
     el.innerHTML = `
       <span class="lampada__corpo">
-        <img class="lampada__img lanterna-tema" src="${imagemLanterna()}" alt="">
+        <img class="lampada__img" src="${imagemLanterna(lampada.lantern)}" alt="">
         <span class="lampada__tempo"></span>
       </span>`;
 

@@ -25,8 +25,6 @@ function aplicarTema(claro) {
   const btn = document.getElementById("btn-tema");
   btn.querySelector("use").setAttribute("href", claro ? "#i-lua" : "#i-sol");
   btn.setAttribute("aria-label", claro ? "Mudar pro modo escuro" : "Mudar pro modo claro");
-
-  atualizarLanternas();
 }
 
 // ---------- som ----------

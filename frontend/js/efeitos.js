@@ -3,11 +3,21 @@
 const reduzirMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
 const temMouse = window.matchMedia("(hover: hover) and (pointer: fine)");
 
-// imagem da lanterna muda com o tema
-function imagemLanterna() {
-  return document.documentElement.classList.contains("claro")
-    ? "img/lanterna-asiatica-dia.png"
-    : "img/lanterna-asiatica.png";
+// lanternas que dá pra escolher; o número (1 a 17) é o que o back guarda em "lantern"
+const LANTERNAS = [
+  "01-jade", "02-snow-sakura", "03-purple-moon", "04-autumn-moss",
+  "05-red-oni", "06-sky-clouds", "07-neon", "08-desert-fabric",
+  "09-ice-crystal", "10-black-orange", "11-red-spiral", "12-mossy-wood",
+  "13-ice-blue", "14-pink-sakura", "15-dark-red", "16-green-coins",
+  "17-purple-pink",
+];
+
+function imagemLanterna(numero) {
+  return "img/lanterns/" + LANTERNAS[numero - 1] + ".png";
+}
+
+function lanternaAleatoria() {
+  return 1 + Math.floor(Math.random() * LANTERNAS.length);
 }
 
 function sortear(min, max) {
@@ -41,19 +51,12 @@ function criarFantasmas() {
       el.style.setProperty("--blur", camada.blur + "px");
 
       const img = document.createElement("img");
-      img.src = imagemLanterna();
+      img.src = imagemLanterna(lanternaAleatoria());
       img.alt = "";
-      img.className = "lanterna-tema";
       el.appendChild(img);
       caixa.appendChild(el);
     }
   });
-}
-
-// troca todas as lanternas da página quando o tema muda
-function atualizarLanternas() {
-  const src = imagemLanterna();
-  document.querySelectorAll(".lanterna-tema").forEach((img) => { img.src = src; });
 }
 
 // ---------- parallax ----------
