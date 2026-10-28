@@ -64,7 +64,7 @@ async function tocarMusicaDoSalao(salao) {
   try {
     const faixa = await api.musica(salao);
     if (!faixa.song) { som.audio.removeAttribute("src"); som.audio.pause(); return; }
-    som.audio.src = "audio/" + faixa.song.file;
+    som.audio.src = faixa.song.file;
     aplicarSom();
   } catch (e) {
     som.salao = null;  // back fora do ar: deixa tentar de novo na próxima vez
