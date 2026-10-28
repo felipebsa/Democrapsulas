@@ -23,6 +23,7 @@
   --fonte-texto: "Inter", system-ui, sans-serif;
   --fonte-tempo: "VT323", ui-monospace, monospace;
   --nav-altura: 68px;
+  --lanterna-tom: brightness(.88) saturate(.95);  /* vai no fim de todo filter de lanterna */
 
   color-scheme: dark;
 }
@@ -40,6 +41,7 @@
   --tempo: #0B3840;
   --tempo-brilho: 0 0 3px #fff, 0 0 8px #fff, 0 0 14px rgba(255, 255, 255, .9);
   --lanterna-brilho: rgba(255, 190, 90, .55);
+  --lanterna-tom: brightness(1.08) saturate(.9) opacity(.85);
 
   color-scheme: light;
 }
@@ -149,7 +151,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   width: 100%;
   image-rendering: pixelated;
   opacity: var(--op);
-  filter: blur(var(--blur)) drop-shadow(0 0 8px rgba(255, 122, 0, .6));
+  filter: blur(var(--blur)) drop-shadow(0 0 8px rgba(255, 122, 0, .6)) var(--lanterna-tom);
   animation: balancar var(--balanco) ease-in-out infinite alternate;
 }
 
@@ -539,7 +541,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   width: 72px;
   margin: 0 auto 14px;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 16px var(--lanterna-brilho));
+  filter: drop-shadow(0 0 16px var(--lanterna-brilho)) var(--lanterna-tom);
 }
 
 .card__tag,
@@ -620,11 +622,11 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .lampada__img {
   width: 112px;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 18px var(--lanterna-brilho));
+  filter: drop-shadow(0 0 18px var(--lanterna-brilho)) var(--lanterna-tom);
   transition: filter .3s;
 }
 
-.lampada:hover .lampada__img { filter: drop-shadow(0 0 26px var(--lanterna-brilho)) brightness(1.1); }
+.lampada:hover .lampada__img { filter: drop-shadow(0 0 26px var(--lanterna-brilho)) brightness(1.1) var(--lanterna-tom); }
 
 .lampada__tempo {
   margin-top: 6px;
@@ -637,7 +639,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   font-variant-numeric: tabular-nums;
 }
 
-.lampada.pronta .lampada__img { filter: drop-shadow(0 0 28px rgba(255, 177, 92, .95)) brightness(1.15); }
+.lampada.pronta .lampada__img { filter: drop-shadow(0 0 28px rgba(255, 177, 92, .95)) brightness(1.15) var(--lanterna-tom); }
 .lampada.pronta .lampada__tempo { animation: piscar 1s steps(2) infinite; }
 
 @keyframes subir-lampada {
@@ -756,7 +758,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   width: 84px;
   transform: translateX(-50%);
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 18px var(--lanterna-brilho));
+  filter: drop-shadow(0 0 18px var(--lanterna-brilho)) var(--lanterna-tom);
 }
 
 .modal h2 {
@@ -1177,13 +1179,13 @@ select.campo option { background: var(--card); color: var(--texto); }
   width: 96px;
   image-rendering: pixelated;
   transform: scale(var(--escala, 1));
-  filter: drop-shadow(0 0 10px var(--lanterna-brilho)) saturate(.8) brightness(.8);
+  filter: drop-shadow(0 0 10px var(--lanterna-brilho)) saturate(.8) brightness(.8) var(--lanterna-tom);
   transition: transform .4s, filter .4s;
 }
 
-.roleta__janela.parou .roleta__celula:not(.escolhida):not(.apagada) img { filter: saturate(.5) brightness(.5); }
-.roleta__celula.escolhida img { transform: scale(1.25); filter: drop-shadow(0 0 26px rgba(255, 177, 92, .95)) brightness(1.2); }
-.roleta__celula.apagada img { filter: grayscale(1) brightness(.6); }
+.roleta__janela.parou .roleta__celula:not(.escolhida):not(.apagada) img { filter: saturate(.5) brightness(.5) var(--lanterna-tom); }
+.roleta__celula.escolhida img { transform: scale(1.25); filter: drop-shadow(0 0 26px rgba(255, 177, 92, .95)) brightness(1.2) var(--lanterna-tom); }
+.roleta__celula.apagada img { filter: grayscale(1) brightness(.6) var(--lanterna-tom); }
 
 /* marcador do meio */
 .roleta__mira {
@@ -1414,12 +1416,12 @@ select.campo option { background: var(--card); color: var(--texto); }
 .podio__lanterna img {
   width: 100%;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 20px var(--lanterna-brilho));
+  filter: drop-shadow(0 0 20px var(--lanterna-brilho)) var(--lanterna-tom);
   transition: filter .3s;
 }
 
-.podio__lugar--1 .podio__lanterna img { filter: drop-shadow(0 0 30px rgba(255, 177, 92, .8)) brightness(1.1); }
-.podio__lugar:hover .podio__lanterna img { filter: drop-shadow(0 0 32px rgba(255, 177, 92, .95)) brightness(1.2); }
+.podio__lugar--1 .podio__lanterna img { filter: drop-shadow(0 0 30px rgba(255, 177, 92, .8)) brightness(1.1) var(--lanterna-tom); }
+.podio__lugar:hover .podio__lanterna img { filter: drop-shadow(0 0 32px rgba(255, 177, 92, .95)) brightness(1.2) var(--lanterna-tom); }
 
 /* o título fica na frente da lanterna, meio torto, tipo plaquinha */
 .podio__titulo {
