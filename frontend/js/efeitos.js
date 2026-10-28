@@ -26,8 +26,9 @@ const LANTERNAS = [
 ];
 
 // põe a imagem e a luz de uma lanterna numa <img>
+// número desconhecido (back com lanterna que o front ainda não tem) cai na primeira, em vez de quebrar a tela
 function mostrarLanterna(img, numero) {
-  const lanterna = LANTERNAS[numero - 1];
+  const lanterna = LANTERNAS[numero - 1] || LANTERNAS[0];
   img.src = "img/lanterns/" + lanterna.arquivo + ".png";
   img.classList.add("lanterna");
   img.style.setProperty("--luz", lanterna.luz);

@@ -113,7 +113,7 @@ async function enviarLampada(e) {
   botao.textContent = "Soltando…";
 
   try {
-    await api.criarLampada({
+    const nova = await api.criarLampada({
       hall: salao,
       title: titulo,
       content: texto,
@@ -121,7 +121,7 @@ async function enviarLampada(e) {
       is_private: false,  // lâmpada privada ainda está em breve
       open_at: new Date(criar.abreEm).toISOString(),
     });
-    lampadaCriada();
+    lampadaCriada(nova);
   } catch (erro) {
     if (erro.status === 401) {
       // token venceu (dura 30 min no back): pede pra entrar de novo e tenta depois
@@ -139,12 +139,12 @@ async function enviarLampada(e) {
   }
 }
 
-function lampadaCriada() {
+function lampadaCriada(nova) {
   gravarStorage("rascunho", null);
   salaoCarregado = null;  // força o salão a buscar de novo e mostrar a nova
 
   document.getElementById("criar-lampada").classList.add("solta");
-  mostrarLanterna(document.getElementById("pronto-lanterna"), criar.lanterna);
+  mostrarLanterna(document.getElementById("pronto-lanterna"), nova.lantern);
 
   setTimeout(() => {
     document.getElementById("pronto-texto").textContent =
