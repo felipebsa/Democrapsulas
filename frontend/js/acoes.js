@@ -104,7 +104,7 @@ async function confirmarDenuncia() {
 
 // ---------- modal de ler ----------
 function abrirLeitura(lampada) {
-  document.getElementById("ler-lanterna").src = imagemLanterna(lampada.lantern);
+  mostrarLanterna(document.getElementById("ler-lanterna"), lampada.lantern);
   document.getElementById("ler-titulo").textContent = lampada.title || "Sem título";
   const quando = new Date(lampada.open_at).toLocaleDateString("pt-BR");
   document.getElementById("ler-info").textContent = (lampada.author ? "por " + lampada.author + " · " : "") + "aberta em " + quando;

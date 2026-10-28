@@ -23,7 +23,7 @@ function montarLugar(lampada, posicao) {
 
   const lanterna = criarEl("span", "podio__lanterna");
   const img = criarEl("img");
-  img.src = imagemLanterna(lampada.lantern);
+  mostrarLanterna(img, lampada.lantern);
   img.alt = "";
   lanterna.append(img, criarEl("span", "podio__titulo", lampada.title || "Sem título"));
 

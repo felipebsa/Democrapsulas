@@ -27,7 +27,7 @@ function atualizarPrevia() {
 // setinhas da prévia: anda pelas lanternas e dá a volta nas pontas
 function trocarLanterna(passo) {
   criar.lanterna = (criar.lanterna - 1 + passo + LANTERNAS.length) % LANTERNAS.length + 1;
-  document.getElementById("criar-lanterna").src = imagemLanterna(criar.lanterna);
+  mostrarLanterna(document.getElementById("criar-lanterna"), criar.lanterna);
   document.getElementById("criar-lanterna-num").textContent = criar.lanterna + " / " + LANTERNAS.length;
 }
 
@@ -144,7 +144,7 @@ function lampadaCriada() {
   salaoCarregado = null;  // força o salão a buscar de novo e mostrar a nova
 
   document.getElementById("criar-lampada").classList.add("solta");
-  document.getElementById("pronto-lanterna").src = imagemLanterna(criar.lanterna);
+  mostrarLanterna(document.getElementById("pronto-lanterna"), criar.lanterna);
 
   setTimeout(() => {
     document.getElementById("pronto-texto").textContent =

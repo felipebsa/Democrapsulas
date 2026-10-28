@@ -80,9 +80,10 @@ function desenharLampadas(lista) {
 
     el.innerHTML = `
       <span class="lampada__corpo">
-        <img class="lampada__img" src="${imagemLanterna(lampada.lantern)}" alt="">
+        <img class="lampada__img" alt="">
         <span class="lampada__tempo"></span>
       </span>`;
+    mostrarLanterna(el.querySelector(".lampada__img"), lampada.lantern);
 
     el.addEventListener("click", () => clicarLampada(lampada, el));
     ceu.appendChild(el);
