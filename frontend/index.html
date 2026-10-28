@@ -13,11 +13,11 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- aplica o tema salvo antes de desenhar a página, pra não piscar -->
+  <!-- aplica o tema antes de desenhar a página, pra não piscar; começa no claro -->
   <script>
-    try {
-      if (localStorage.getItem("tema") === "claro") document.documentElement.classList.add("claro");
-    } catch (e) {}
+    var escolhido = null;
+    try { escolhido = localStorage.getItem("tema-escolhido"); } catch (e) {}
+    if (escolhido !== "escuro") document.documentElement.classList.add("claro");
   </script>
 </head>
 <body>

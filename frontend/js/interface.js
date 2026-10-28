@@ -17,10 +17,10 @@ function erroNoForm(idForm, idErro, texto, campo) {
   if (campo) { campo.classList.add("invalido"); campo.focus(); }
 }
 
-// ---------- tema ----------
-function aplicarTema(claro) {
+// ---------- tema (claro é o padrão; só grava quando a pessoa troca) ----------
+function aplicarTema(claro, gravar = false) {
   document.documentElement.classList.toggle("claro", claro);
-  gravarStorage("tema", claro ? "claro" : "escuro");
+  if (gravar) gravarStorage("tema-escolhido", claro ? "claro" : "escuro");
 
   const btn = document.getElementById("btn-tema");
   btn.querySelector("use").setAttribute("href", claro ? "#i-lua" : "#i-sol");
@@ -223,7 +223,7 @@ function iniciarInterface() {
   aplicarSom();
 
   document.getElementById("btn-tema").addEventListener("click", () => {
-    aplicarTema(!document.documentElement.classList.contains("claro"));
+    aplicarTema(!document.documentElement.classList.contains("claro"), true);
   });
 
   document.getElementById("btn-som").addEventListener("click", () => {
