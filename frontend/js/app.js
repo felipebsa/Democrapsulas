@@ -90,7 +90,6 @@ function mostrarEmBreve(titulo) {
 function rotear() {
   const partes = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   const rota = partes[0] || "";
-  const navbar = document.getElementById("navbar");
 
   fecharDropdowns();
   definirMenuCelular(false);
@@ -109,12 +108,12 @@ function rotear() {
 
   // abriu um link direto sem passar pela entrada: conta como entrou também
   marcarEntrou();
+  atualizarNavbar();
 
   if (rota === "salao") {
     const salao = SALOES[partes[1]] ? partes[1] : "asiatico";
     marcarLinkAtivo("salao", salao);
     document.title = "Salão " + SALOES[salao] + " · Democrápsulas";
-    navbar.classList.add("rolada");  // salão não rola, então a navbar já fica de vidro
 
     if (salao === "asiatico") {
       mostrar("pagina-salao");
@@ -125,7 +124,6 @@ function rotear() {
     return;
   }
 
-  atualizarNavbar();
   const titulo = PAGINAS[rota];
   if (!titulo) { location.replace("#/salao/asiatico"); return; }
   marcarLinkAtivo(rota);
