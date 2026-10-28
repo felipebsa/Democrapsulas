@@ -80,4 +80,11 @@ const api = {
   sortear: (salao) => requisicao("/capsules/random" + (salao ? "?hall=" + encodeURIComponent(salao) : "")),
 
   musica: (salao) => requisicao("/halls/" + encodeURIComponent(salao) + "/track"),
+
+  // valor 1 (gostei) ou -1 (não gostei); as duas devolvem a lâmpada com o score novo
+  votar: (id, valor) => requisicao("/capsules/" + id + "/vote", { method: "PUT", body: { value: valor } }),
+
+  tirarVoto: (id) => requisicao("/capsules/" + id + "/vote", { method: "DELETE" }),
+
+  denunciar: (id) => requisicao("/capsules/" + id + "/report", { method: "POST", body: {} }),
 };

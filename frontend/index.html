@@ -268,6 +268,7 @@
         <p class="card__tag" id="roleta-info"></p>
         <h2 class="roleta__titulo" id="roleta-titulo"></h2>
         <p class="ler__texto" id="roleta-texto"></p>
+        <div class="acoes" id="roleta-acoes" hidden></div>
       </article>
     </div>
   </main>
@@ -283,7 +284,7 @@
   </main>
 
   <!-- ================= MODAL ENTRAR / CRIAR CONTA ================= -->
-  <div class="modal-fundo" id="modal-auth" hidden>
+  <div class="modal-fundo modal-fundo--cima" id="modal-auth" hidden>
     <div class="modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="auth-titulo">
       <button class="modal__fechar icone" id="auth-fechar" aria-label="Fechar">
         <svg class="ic"><use href="#i-x"/></svg>
@@ -322,6 +323,25 @@
       <h2 id="ler-titulo"></h2>
       <p class="modal__sub" id="ler-info"></p>
       <p class="ler__texto" id="ler-texto"></p>
+      <div class="acoes" id="ler-acoes"></div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL DENUNCIAR ================= -->
+  <div class="modal-fundo modal-fundo--cima" id="modal-denuncia" hidden>
+    <div class="modal modal--denuncia" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="denuncia-titulo" aria-describedby="denuncia-sub">
+      <button class="modal__fechar icone" data-fechar aria-label="Fechar">
+        <svg class="ic"><use href="#i-x"/></svg>
+      </button>
+      <svg class="bloqueio denuncia__icone" aria-hidden="true"><use href="#i-bloqueio"/></svg>
+      <h2 id="denuncia-titulo">Denunciar essa lâmpada?</h2>
+      <p class="modal__sub" id="denuncia-sub"></p>
+      <div class="denuncia__botoes">
+        <button class="btn-borda" type="button" id="denuncia-cancelar">Cancelar</button>
+        <button class="btn-perigo" type="button" id="denuncia-confirmar">
+          <span class="btn-perigo__contagem" id="denuncia-contagem" aria-hidden="true">3</span>Continuar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -343,6 +363,26 @@
       <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
       <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
       <symbol id="i-seta" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <!-- seta dos votos: corpo preenchido, contorno e um brilho que acende no voto escolhido (a de baixo é ela girada) -->
+      <symbol id="i-voto" viewBox="0 0 24 24">
+        <path d="M12 2.5 3.2 11.6a.8.8 0 0 0 .6 1.4H8.5v7.2A1.8 1.8 0 0 0 10.3 22h3.4a1.8 1.8 0 0 0 1.8-1.8V13h4.7a.8.8 0 0 0 .6-1.4Z" style="fill: currentColor; fill-opacity: var(--seta-fundo, .12)"/>
+        <path d="M12 6.2 7.4 11M10.6 14.5v5" style="stroke: #fff; stroke-opacity: var(--seta-brilho, 0); stroke-width: 1.5"/>
+      </symbol>
+      <!-- bloqueio da denúncia: contorno escuro, barra por baixo do anel, degradê e brilho em cima -->
+      <linearGradient id="bloqueio-degrade" gradientUnits="userSpaceOnUse" x1="8" y1="6" x2="40" y2="42">
+        <stop offset="0" stop-color="#FFD25A"/>
+        <stop offset=".45" stop-color="#FF8A12"/>
+        <stop offset="1" stop-color="#D2370A"/>
+      </linearGradient>
+      <symbol id="i-bloqueio" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="18" stroke="#2B0A00" stroke-width="10"/>
+        <path d="m12 12 24 24" stroke="#2B0A00" stroke-width="10"/>
+        <path d="m12 12 24 24" stroke="url(#bloqueio-degrade)" stroke-width="6"/>
+        <path d="M15.6 13.5 27 24.9" stroke="#FFE7A3" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="24" cy="24" r="18" stroke="url(#bloqueio-degrade)" stroke-width="6"/>
+        <path d="M5.7 19.1A19 19 0 0 1 16 6.8" stroke="#FFF1C4" stroke-opacity=".85" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M39 29.5A16 16 0 0 1 27.3 39.8" stroke="#7A1C00" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round"/>
+      </symbol>
       <symbol id="i-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
     </defs>
   </svg>
@@ -351,6 +391,7 @@
   <script src="js/api.js"></script>
   <script src="js/efeitos.js"></script>
   <script src="js/interface.js"></script>
+  <script src="js/acoes.js"></script>
   <script src="js/salao.js"></script>
   <script src="js/criar.js"></script>
   <script src="js/roleta.js"></script>

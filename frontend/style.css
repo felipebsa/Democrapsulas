@@ -1245,3 +1245,124 @@ select.campo option { background: var(--card); color: var(--texto); }
   .roleta__janela { height: 160px; }
   .roleta__celula img { width: 80px; }
 }
+
+/* =========================================================
+   VOTOS E DENÚNCIA
+   ========================================================= */
+/* login e denúncia abrem por cima do modal de ler */
+.modal-fundo--cima { z-index: 55; }
+
+.acoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borda);
+}
+
+.votos { display: inline-flex; align-items: center; gap: 6px; }
+
+/* cada seta tem sua cor: laranja pra cima, azul pra baixo. Apagada até passar o mouse ou votar */
+.voto {
+  --cor-voto: var(--laranja);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--texto-cinza);
+  transition: color .2s, background-color .2s;
+}
+
+.voto--baixo { --cor-voto: #7AA7FF; }
+.claro .voto--baixo { --cor-voto: #2F5FD0; }
+
+.seta {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .2s, filter .2s;
+}
+
+.voto--baixo .seta { transform: rotate(180deg); }
+
+.voto:hover { color: var(--cor-voto); --seta-fundo: .22; }
+.voto--cima:hover .seta { transform: translateY(-2px); }
+.voto--baixo:hover .seta { transform: rotate(180deg) translateY(-2px); }
+
+.voto.ativo {
+  color: var(--cor-voto);
+  background: color-mix(in srgb, var(--cor-voto) 15%, transparent);
+  --seta-fundo: .45;
+  --seta-brilho: .6;
+}
+
+.voto.ativo .seta { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--cor-voto) 70%, transparent)); }
+.voto:disabled { opacity: .5; }
+
+.denunciar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transition: background-color .2s;
+}
+
+.bloqueio { display: block; width: 28px; height: 28px; transition: transform .2s, filter .2s; }
+.denunciar:hover { background: rgba(255, 122, 0, .12); }
+.denunciar:hover .bloqueio { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 122, 0, .7)); }
+
+.modal--denuncia { text-align: center; }
+
+.denuncia__icone {
+  width: 56px;
+  height: 56px;
+  margin: 4px auto 0;
+  filter: drop-shadow(0 0 14px rgba(255, 122, 0, .5));
+}
+
+.modal--denuncia h2 { margin-top: 10px; }
+
+.denuncia__botoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn-perigo {
+  height: 46px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 12px;
+  background: #e5484d;
+  color: #fff;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  box-shadow: 0 0 22px rgba(229, 72, 77, .35);
+  transition: background-color .3s, color .3s, box-shadow .3s;
+}
+
+.btn-perigo:hover { background: #f0595e; }
+
+/* enquanto conta os 3 segundos fica escuro */
+.btn-perigo.esperando,
+.btn-perigo.esperando:hover {
+  background: #5c2023;
+  color: rgba(255, 255, 255, .55);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-perigo__contagem {
+  font-family: var(--fonte-tempo);
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: 0;
+}

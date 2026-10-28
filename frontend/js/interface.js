@@ -135,7 +135,7 @@ function sair() {
 // ---------- modal entrar / criar conta ----------
 const APELIDO_VALIDO = /^[A-Za-z0-9_]{3,20}$/;
 let abaAtual = "entrar";
-let focoAntesDoModal = null;
+const focoAntesDoModal = {};  // por modal, porque a denúncia abre por cima do de ler
 
 function trocarAba(aba) {
   abaAtual = aba;
@@ -160,7 +160,7 @@ function mostrarErro(texto, campo) {
 }
 
 function abrirModal(id) {
-  focoAntesDoModal = document.activeElement;
+  focoAntesDoModal[id] = document.activeElement;
   const modal = document.getElementById(id);
   modal.hidden = false;
   // foca no primeiro campo; se não tiver campo (modal de ler), foca na própria caixa
@@ -170,7 +170,7 @@ function abrirModal(id) {
 
 function fecharModal(id) {
   document.getElementById(id).hidden = true;
-  if (focoAntesDoModal) focoAntesDoModal.focus();
+  if (focoAntesDoModal[id]) focoAntesDoModal[id].focus();
 }
 
 function abrirLogin(aba = "entrar") {
@@ -252,14 +252,15 @@ function iniciarInterface() {
 
   const modalAuth = document.getElementById("modal-auth");
   const modalLer = document.getElementById("modal-ler");
+  const modalDenuncia = document.getElementById("modal-denuncia");
   ligarFecharPeloFundo(modalAuth, () => fecharModal("modal-auth"));
   ligarFecharPeloFundo(modalLer, () => fecharModal("modal-ler"));
   modalLer.querySelector("[data-fechar]").addEventListener("click", () => fecharModal("modal-ler"));
 
   document.addEventListener("keydown", (e) => {
-    // com modal aberto, o Tab fica rodando só dentro dele
+    // com modal aberto, o Tab fica rodando só dentro dele (o de cima, se tiver dois)
     if (e.key === "Tab") {
-      const aberto = [modalAuth, modalLer].find((m) => !m.hidden);
+      const aberto = [modalDenuncia, modalAuth, modalLer].find((m) => !m.hidden);
       if (!aberto) return;
       const focaveis = [...aberto.querySelectorAll("button, input, a[href]")].filter((el) => !el.disabled && el.offsetParent);
       const primeiro = focaveis[0];
@@ -269,7 +270,8 @@ function iniciarInterface() {
       return;
     }
     if (e.key !== "Escape") return;
-    if (!modalAuth.hidden) fecharModal("modal-auth");
+    if (!modalDenuncia.hidden) fecharDenuncia();
+    else if (!modalAuth.hidden) fecharModal("modal-auth");
     else if (!modalLer.hidden) fecharModal("modal-ler");
     else { fecharDropdowns(); definirMenuCelular(false); }
   });

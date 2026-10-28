@@ -68,6 +68,7 @@ function desenharLampadas(lista) {
     const el = document.createElement("button");
     el.className = "lampada";
     el.type = "button";
+    el.dataset.id = lampada.id;
     el.dataset.abre = new Date(lampada.open_at).getTime();
     el.style.setProperty("--x", Math.min(92, Math.max(8, x)) + "%");
     el.style.setProperty("--y", sortear(10, 75) + "%");
@@ -113,22 +114,25 @@ async function clicarLampada(lampada, el) {
     return;
   }
 
-  let dados = lampada;
   // se abriu enquanto a pessoa tava na página, a lista não tem o texto ainda: busca de novo
-  if (!dados.content) {
+  // (e guarda na própria lâmpada, pra próxima vez já ter)
+  if (!lampada.content) {
     try {
-      dados = await api.lampada(lampada.id);
+      Object.assign(lampada, await api.lampada(lampada.id));
     } catch (e) {
       mostrarAviso("Não deu pra abrir essa lâmpada agora.");
       return;
     }
   }
 
-  document.getElementById("ler-titulo").textContent = dados.title || "Sem título";
-  const quando = new Date(dados.open_at).toLocaleDateString("pt-BR");
-  document.getElementById("ler-info").textContent = (dados.author ? "por " + dados.author + " · " : "") + "aberta em " + quando;
-  document.getElementById("ler-texto").textContent = dados.content || "";
-  abrirModal("modal-ler");
+  abrirLeitura(lampada);
+}
+
+// lâmpada denunciada some do salão na hora
+function tirarDoSalao(lampada) {
+  lampadasAtuais = lampadasAtuais.filter((l) => l.id !== lampada.id);
+  const el = document.querySelector('.lampada[data-id="' + lampada.id + '"]');
+  if (el) el.remove();
 }
 
 // ---------- "i" do Como funciona ----------
@@ -142,6 +146,10 @@ function definirInfo(aberto) {
   btn.setAttribute("aria-expanded", String(aberto));
   clearTimeout(timerInfo);
   if (aberto) timerInfo = setTimeout(() => definirInfo(false), 15000);
+}
+
+function iniciarSalao() {
+  document.addEventListener("denunciou", (e) => tirarDoSalao(e.detail));
 }
 
 function iniciarInfo() {

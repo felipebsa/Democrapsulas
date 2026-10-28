@@ -139,6 +139,8 @@ iniciarEfeitos();
 iniciarInterface();
 iniciarEntrada();
 iniciarInfo();
+iniciarSalao();
+iniciarAcoes();
 iniciarCriar();
 iniciarRoleta();
 window.addEventListener("hashchange", rotear);

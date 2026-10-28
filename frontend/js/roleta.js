@@ -6,6 +6,7 @@ const ALVO = 36;              // a lanterna onde a faixa para
 const DURACAO_GIRO = 4200;
 
 let girando = false;
+let lampadaDaRoleta = null;  // a que tá aberta no resultado, pra sumir se for denunciada
 
 function montarFaixa() {
   const faixa = document.getElementById("roleta-faixa");
@@ -44,6 +45,9 @@ function mostrarResultado(lampada) {
   const info = document.getElementById("roleta-info");
   const titulo = document.getElementById("roleta-titulo");
   const texto = document.getElementById("roleta-texto");
+  const acoes = document.getElementById("roleta-acoes");
+  lampadaDaRoleta = typeof lampada === "object" ? lampada : null;
+  acoes.hidden = !lampadaDaRoleta;
 
   if (lampada === "nenhuma") {
     info.textContent = "Ainda não";
@@ -59,6 +63,7 @@ function mostrarResultado(lampada) {
     info.textContent = (lampada.author ? "por " + lampada.author + " · " : "") + quando;
     titulo.textContent = lampada.title || "Sem título";
     texto.textContent = lampada.content || "";
+    montarAcoes(acoes, lampada);
   }
 
   caixa.hidden = false;
@@ -120,6 +125,9 @@ function abrirRoleta() {
 
 function iniciarRoleta() {
   document.getElementById("btn-girar").addEventListener("click", girar);
+  document.addEventListener("denunciou", (e) => {
+    if (lampadaDaRoleta && lampadaDaRoleta.id === e.detail.id) document.getElementById("roleta-resultado").hidden = true;
+  });
   window.addEventListener("resize", () => {
     if (!document.getElementById("pagina-roleta").hidden && !girando) abrirRoleta();
   });
